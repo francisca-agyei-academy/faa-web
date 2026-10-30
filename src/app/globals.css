@@ -1,26 +1,242 @@
 @import "tailwindcss";
 
+/* Design tokens. Tailwind v4 reads these from CSS (there is no tailwind.config.ts):
+   each --color-* becomes a utility, e.g. bg-brand, text-muted, border-line. */
+@theme {
+  /* Deep academic navy with a warm gold accent */
+  --color-brand: #14295a;
+  --color-brand-strong: #0b1a3d;
+  --color-brand-soft: #eaeef8;
+  --color-accent: #c79a3e;
+  --color-accent-strong: #a57b26;
+  --color-accent-soft: #fbf4e6;
+
+  --color-ink: #121826;
+  --color-muted: #4b5468;
+  --color-subtle: #8a92a5;
+  --color-line: #e4e7ee;
+  --color-canvas: #f7f6f2;
+  --color-surface: #ffffff;
+
+  --color-danger: #b42318;
+  --color-danger-soft: #fef3f2;
+  --color-success: #067647;
+  --color-success-soft: #ecfdf3;
+  --color-warning: #93370d;
+  --color-warning-soft: #fffaeb;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Lets <details> animate to height: auto */
+  interpolate-size: allow-keywords;
+}
+
+/* ───────────── Motion ─────────────
+   One easing curve everywhere gives the site a consistent, calm feel. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Hero entrance: each element rises in turn (delay set inline via --delay). */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+    filter: blur(6px);
   }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+.animate-rise {
+  animation: rise 1s var(--ease-premium) both;
+  animation-delay: var(--delay, 0ms);
+}
+
+/* Hero photo settles from a slight zoom. */
+@keyframes settle {
+  from {
+    transform: scale(1.12);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+.animate-settle {
+  animation: settle 2.4s var(--ease-premium) both;
+}
+
+/* Floating cards drift gently. */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: var(--delay, 0ms);
+}
+
+/* Gold text with a slow light sweeping across it. */
+@keyframes shimmer {
+  to {
+    background-position: -200% center;
+  }
+}
+.text-shimmer {
+  background: linear-gradient(110deg, var(--color-accent) 35%, #f3dca6 50%, var(--color-accent) 65%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 5s linear infinite;
+}
+
+/* Endless ribbon: the list is rendered twice and slides by half its width. */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 22s linear infinite;
+}
+.marquee:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+/* Background glow that slowly drifts. */
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-60px, 40px) scale(1.1);
+  }
+}
+.animate-drift {
+  animation: drift 18s ease-in-out infinite;
+}
+
+/* Dashes that travel along a line (the flight path). */
+@keyframes dash {
+  to {
+    stroke-dashoffset: -48;
+  }
+}
+.animate-dash {
+  animation: dash 2.5s linear infinite;
+}
+
+/* Slow pulse around a destination dot. */
+@keyframes ping-slow {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(3.5);
+    opacity: 0;
+  }
+}
+.animate-ping-slow {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ping-slow 2.4s var(--ease-premium) infinite;
+}
+
+/* Sheen that crosses a button on hover. */
+.btn-sheen {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(120deg, transparent 30%, rgb(255 255 255 / 0.35) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.8s var(--ease-premium);
+}
+.btn-sheen:hover::after {
+  transform: translateX(120%);
+}
+
+/* Scroll reveal. Only hidden when JavaScript runs (the "js" class is set in the root
+   layout), so the content is never lost if scripts fail. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.9s var(--ease-premium),
+    transform 0.9s var(--ease-premium);
+  transition-delay: var(--delay, 0ms);
+}
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Smooth accordion */
+details::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    block-size 0.45s var(--ease-premium),
+    content-visibility 0.45s allow-discrete;
+}
+details[open]::details-content {
+  block-size: auto;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-rise,
+  .animate-settle,
+  .animate-float,
+  .animate-marquee,
+  .animate-drift,
+  .animate-dash,
+  .animate-ping-slow,
+  .text-shimmer {
+    animation: none;
+  }
+  .text-shimmer {
+    color: var(--color-accent);
+  }
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .btn-sheen::after,
+  details::details-content {
+    transition: none;
+  }
 }
