@@ -7,7 +7,7 @@ import { FinalCta } from "@/components/website/home/FinalCta";
 import { JourneySection } from "@/components/website/home/JourneySection";
 import { ToolkitSection } from "@/components/website/home/ToolkitSection";
 
-// Order follows the brief: who FAA is, what it offers, who it's for, then how to start.
+// Order follows the brief: who Gradvane Global is, what it offers, who it's for, then how to start.
 export default function HomePage() {
   return (
     <>

@@ -37,6 +37,8 @@ interface CourseBase {
   outcomeTo: string | null;
   topics: string[];
   imageKey: string;
+  /** Uploaded photo (Cloudflare R2); shown instead of imageKey when set. */
+  imageUrl: string | null;
   isPublished: boolean;
   isFeatured: boolean;
   enrollmentOpen: boolean;
@@ -56,7 +58,7 @@ export interface AdminCourse extends CourseBase {
   modules: AdminModule[];
 }
 
-export type CourseInput = Omit<CourseBase, "id" | "createdAt" | "updatedAt">;
+export type CourseInput = Omit<CourseBase, "id" | "createdAt" | "updatedAt" | "imageUrl">;
 export type ModuleInput = Omit<AdminModule, "id" | "courseId" | "order">;
 
 export interface PersonRef {

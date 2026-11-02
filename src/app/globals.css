@@ -3,19 +3,21 @@
 /* Design tokens. Tailwind v4 reads these from CSS (there is no tailwind.config.ts):
    each --color-* becomes a utility, e.g. bg-brand, text-muted, border-line. */
 @theme {
-  /* Deep academic navy with a warm gold accent */
-  --color-brand: #14295a;
-  --color-brand-strong: #0b1a3d;
-  --color-brand-soft: #eaeef8;
-  --color-accent: #c79a3e;
-  --color-accent-strong: #a57b26;
-  --color-accent-soft: #fbf4e6;
+  /* Gradvane Global: deep indigo, lavender and a pink accent, taken from the logo */
+  --color-brand: #2b2a6e;
+  --color-brand-strong: #1c1b4d;
+  --color-brand-soft: #ebeaf8;
+  --color-lavender: #b9b6e8;
+  /* accent is for decoration and dark backgrounds; accent-strong for text and buttons on light */
+  --color-accent: #e0457b;
+  --color-accent-strong: #c22e61;
+  --color-accent-soft: #fdebf1;
 
-  --color-ink: #121826;
-  --color-muted: #4b5468;
-  --color-subtle: #8a92a5;
-  --color-line: #e4e7ee;
-  --color-canvas: #f7f6f2;
+  --color-ink: #17163a;
+  --color-muted: #4e4d6b;
+  --color-subtle: #8d8ca8;
+  --color-line: #e5e4f0;
+  --color-canvas: #f4f3fa;
   --color-surface: #ffffff;
 
   --color-danger: #b42318;
@@ -26,7 +28,7 @@
   --color-warning-soft: #fffaeb;
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
@@ -95,7 +97,7 @@ html {
   }
 }
 .text-shimmer {
-  background: linear-gradient(110deg, var(--color-accent) 35%, #f3dca6 50%, var(--color-accent) 65%);
+  background: linear-gradient(110deg, var(--color-accent) 35%, #f9c3d6 50%, var(--color-accent) 65%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;

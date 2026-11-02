@@ -5,7 +5,7 @@ import { NextResponse, type NextRequest } from "next/server";
 // and the dashboard and admin layouts confirm the session before showing anything.
 const SESSION_HINT_COOKIE = "faa_session";
 
-const PROTECTED = ["/dashboard", "/my-courses", "/course", "/admin"];
+const PROTECTED = ["/dashboard", "/my-courses", "/course", "/checkout", "/admin"];
 const GUEST_ONLY = ["/login", "/register"];
 
 const matches = (pathname: string, prefixes: string[]) =>
@@ -37,6 +37,7 @@ export const config = {
     "/dashboard/:path*",
     "/my-courses/:path*",
     "/course/:path*",
+    "/checkout/:path*",
     "/admin/:path*",
     "/login",
     "/register",

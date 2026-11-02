@@ -1,9 +1,9 @@
 /** Brand copy for the website. Edit wording here. */
 
-export const tagline = "Build the path. Access the opportunity. Go global.";
+export const tagline = "Learn. Prepare. Progress.";
 
 export const about =
-  "Francisca Agyei Academy (FAA) is an online education brand designed to help African students, recent graduates and emerging researchers navigate scholarships, postgraduate study, research, publishing and international academic opportunities. It draws on practical guidance from someone who has walked the journey.";
+  "Gradvane Global is an online educational platform that equips students, recent graduates and emerging researchers with the knowledge, resources and guidance to navigate scholarships, postgraduate studies, research, academic publishing and international opportunities.";
 
 export const coreLessons = [
   "Scholarships",
@@ -17,42 +17,37 @@ export const coreLessons = [
 export const pillars = [
   {
     title: "Mission",
-    body: "To make global academic opportunities more accessible by giving African students and emerging researchers practical knowledge, resources and guidance to navigate scholarships, master's, postgraduate study, research and international academic careers.",
+    body: "To equip students and emerging researchers with practical knowledge, resources and guidance to access global academic opportunities, advance their education and build successful research and professional careers.",
   },
   {
     title: "Vision",
-    body: "To become a trusted global platform empowering the next generation of African scholars, researchers and academic professionals to thrive internationally.",
-  },
-  {
-    title: "Our promise",
-    body: "FAA equips African students and emerging researchers with the knowledge, tools and strategies they need to access global academic opportunities and build successful research careers.",
+    body: "To become a leading global platform that expands access to academic opportunities and empowers the next generation of students, scholars, researchers and professionals to thrive internationally.",
   },
 ];
 
 export const philosophy =
-  "You do not need to have everything figured out before you start; you need the right information, strategy and guidance to take the next step.";
+  "We believe that every academic ambition deserves an opportunity. With the right knowledge, practical guidance and resources, individuals can navigate academic pathways, overcome barriers and pursue opportunities beyond borders.";
+
+export const audienceIntro =
+  "Gradvane serves students, aspiring scholars and emerging researchers seeking academic opportunities, professional development and international exposure.";
 
 export const audiences = [
   {
     title: "Aspiring Scholars",
     points: [
-      "Final-year undergraduates and recent graduates.",
-      "People seeking Master's, PhD and scholarship opportunities abroad.",
-      "Students who need help finding opportunities, supervisors and funding.",
+      "Final-year undergraduate students preparing for postgraduate education.",
+      "Recent graduates seeking fully funded Master's and PhD opportunities abroad.",
+      "Students seeking scholarships, research opportunities and potential supervisors.",
+      "Anyone who needs guidance with university applications, academic CVs and Statements of Purpose.",
     ],
   },
   {
     title: "Emerging Researchers",
     points: [
-      "Master's students, PhD students and early-career researchers.",
-      "People seeking research, academic writing, publishing, conference and AI-for-research skills.",
-    ],
-  },
-  {
-    title: "Global Academic Professionals",
-    points: [
-      "Researchers and academics seeking international collaborations, fellowships and career pathways.",
-      "People interested in international organisations, research careers and professional networking.",
+      "Master's and PhD students seeking to strengthen their research skills.",
+      "Early-career researchers interested in academic publishing.",
+      "Anyone looking to take part in international conferences and research collaborations.",
+      "Students and researchers improving their academic writing and responsible use of AI in research.",
     ],
   },
 ];

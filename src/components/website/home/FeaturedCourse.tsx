@@ -3,15 +3,19 @@ import laptopClassroom from "@/assets/images/student-laptop-classroom.jpg";
 import { ButtonLink } from "@/components/ui/Button";
 import { ArrowRight, Layers, Sparkle } from "@/components/ui/Icons";
 import { Reveal } from "@/components/ui/Reveal";
-import { featuredCourse as course } from "@/content/courses";
+import { featuredOf, getCatalog } from "@/lib/catalog";
 import { SectionHeading } from "../SectionHeading";
 
-export function FeaturedCourse() {
+export async function FeaturedCourse() {
+  const courses = await getCatalog();
+  if (!courses?.length) return null;
+  const course = featuredOf(courses)!;
+  const outcome = course.outcomeFrom && course.outcomeTo ? { from: course.outcomeFrom, to: course.outcomeTo } : null;
   return (
     <section className="bg-surface py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading title="Start with our flagship course">
-          <p>Eight focused modules take you from first search to a strategic, fully funded application.</p>
+          <p>{course.description}</p>
         </SectionHeading>
 
         <Reveal className="mt-12">
@@ -29,22 +33,22 @@ export function FeaturedCourse() {
           </div>
           <div className="flex flex-col p-8 sm:p-12">
             <h3 className="font-display text-3xl font-semibold leading-tight text-ink">{course.title}</h3>
-            {course.outcome && (
+            {outcome && (
               <div className="mt-8 grid gap-4 sm:grid-cols-2">
                 <div className="rounded-xl border border-line bg-surface p-5">
                   <p className="text-sm font-medium text-subtle">Before</p>
-                  <p className="mt-2 text-sm italic leading-relaxed text-muted">&ldquo;{course.outcome.from}&rdquo;</p>
+                  <p className="mt-2 text-sm italic leading-relaxed text-muted">&ldquo;{outcome.from}&rdquo;</p>
                 </div>
                 <div className="rounded-xl border border-accent/40 bg-accent-soft p-5">
                   <p className="text-sm font-medium text-accent-strong">After</p>
-                  <p className="mt-2 text-sm italic leading-relaxed text-ink">&ldquo;{course.outcome.to}&rdquo;</p>
+                  <p className="mt-2 text-sm italic leading-relaxed text-ink">&ldquo;{outcome.to}&rdquo;</p>
                 </div>
               </div>
             )}
             <ol className="mt-8 grid gap-x-6 gap-y-3 sm:grid-cols-2">
-              {course.modules?.map((m) => (
-                <li key={m.number} className="flex gap-3 text-sm text-ink">
-                  <span className="font-display font-semibold text-accent-strong">{String(m.number).padStart(2, "0")}</span>
+              {course.modules.map((m, index) => (
+                <li key={m.id} className="flex gap-3 text-sm text-ink">
+                  <span className="font-display font-semibold text-accent-strong">{String(index + 1).padStart(2, "0")}</span>
                   {m.title}
                 </li>
               ))}

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { ArrowRight, Layers, Sparkle } from "@/components/ui/Icons";
 import { Reveal } from "@/components/ui/Reveal";
 import { CourseCard, StatusBadge } from "@/components/website/CourseCard";
-import { courses, featuredCourse } from "@/content/courses";
+import { EmptyState } from "@/components/ui/Card";
+import { CourseImage } from "@/components/website/CourseImage";
+import { featuredOf, getCatalog } from "@/lib/catalog";
 
 export const metadata: Metadata = {
   title: "Courses",
@@ -14,8 +15,10 @@ export const metadata: Metadata = {
 
 const delay = (ms: number) => ({ "--delay": `${ms}ms` }) as CSSProperties;
 
-export default function CoursesPage() {
-  const others = courses.filter((course) => course.slug !== featuredCourse.slug);
+export default async function CoursesPage() {
+  const courses = await getCatalog();
+  const featuredCourse = courses?.length ? featuredOf(courses) : undefined;
+  const others = (courses ?? []).filter((course) => course.slug !== featuredCourse?.slug);
 
   return (
     <>
@@ -29,7 +32,7 @@ export default function CoursesPage() {
             className="animate-rise max-w-3xl font-display text-4xl font-semibold leading-tight sm:text-5xl"
             style={delay(100)}
           >
-            Learn the path to <span className="text-shimmer italic">global</span> academic opportunities
+            Learn the path to <span className="text-shimmer">global</span> academic opportunities
           </h1>
           <p className="animate-rise mt-5 max-w-2xl text-lg text-white/70" style={delay(250)}>
             Practical courses for every stage, from your first scholarship search to publishing and building an
@@ -39,33 +42,29 @@ export default function CoursesPage() {
       </section>
 
       <section className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        {!courses && (
+          <EmptyState title="Courses couldn't be loaded">Please refresh the page in a moment.</EmptyState>
+        )}
+        {featuredCourse && (
         <Reveal>
           <Link
             href={`/courses/${featuredCourse.slug}`}
             className="group grid overflow-hidden rounded-4xl border border-line bg-surface shadow-sm transition-all duration-500 ease-(--ease-premium) hover:-translate-y-1 hover:shadow-xl hover:shadow-brand/10 md:grid-cols-[1fr_1.2fr]"
           >
             <div className="relative min-h-64 overflow-hidden">
-              <Image
-                src={featuredCourse.image}
-                alt={featuredCourse.imageAlt}
-                fill
-                sizes="(min-width: 768px) 45vw, 100vw"
-                placeholder="blur"
-                loading="eager"
-                className="object-cover object-top transition-transform duration-1000 ease-(--ease-premium) group-hover:scale-105"
-              />
+              <CourseImage course={featuredCourse} sizes="(min-width: 768px) 45vw, 100vw" eager className="object-top transition-transform duration-1000 ease-(--ease-premium) group-hover:scale-105" />
               <div className="absolute left-5 top-5">
-                <StatusBadge status={featuredCourse.status} />
+                <StatusBadge course={featuredCourse} />
               </div>
             </div>
             <div className="flex flex-col p-8 sm:p-10">
               <h2 className="font-display text-3xl font-semibold leading-tight text-ink group-hover:text-brand">
                 {featuredCourse.title}
               </h2>
-              <p className="mt-4 leading-relaxed text-muted">{featuredCourse.summary}</p>
+              <p className="mt-4 leading-relaxed text-muted">{featuredCourse.description}</p>
               <div className="mt-auto flex flex-wrap items-center gap-x-6 gap-y-2 pt-8 text-sm text-muted">
                 <span className="inline-flex items-center gap-2">
-                  <Layers className="size-4" /> {featuredCourse.modules?.length} modules
+                  <Layers className="size-4" /> {featuredCourse.modules.length || featuredCourse.topics.length} {featuredCourse.modules.length ? "modules" : "topics"}
                 </span>
                 <span className="inline-flex items-center gap-2">
                   <Sparkle className="size-4" /> Student Toolkit + signature bonus
@@ -77,6 +76,7 @@ export default function CoursesPage() {
             </div>
           </Link>
         </Reveal>
+        )}
 
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {others.map((course, index) => (

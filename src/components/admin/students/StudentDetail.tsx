@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { useAuth } from "@/hooks/useAuth";
@@ -31,6 +32,13 @@ const actionCopy: Record<Action["kind"], { title: string; confirm: string; body:
   "make-student": { title: "Remove admin access?", confirm: "Remove admin access", body: "They will keep their account as a regular student." },
 };
 
+const actionDone: Record<Action["kind"], string> = {
+  disable: "Account disabled and signed out everywhere.",
+  enable: "Account enabled.",
+  "make-admin": "Admin access granted.",
+  "make-student": "Admin access removed.",
+};
+
 export function StudentDetail() {
   const { id } = useParams<{ id: string }>();
   const { user: me } = useAuth();
@@ -50,6 +58,7 @@ export function StudentDetail() {
     setActionError(null);
     try {
       await api(`/admin/students/${id}`, { method: "PATCH", body });
+      toast.success(actionDone[action.kind]);
       setAction(null);
       reload();
     } catch (err) {

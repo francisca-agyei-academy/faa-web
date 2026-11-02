@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState, type FormEvent } from "react";
-import { Alert } from "@/components/ui/Alert";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
@@ -43,38 +43,36 @@ const slugify = (text: string) =>
 export function CourseForm({
   initial,
   submitLabel,
+  successMessage = "Changes saved.",
   onSave,
 }: {
   initial: CourseInput;
   submitLabel: string;
+  successMessage?: string;
   onSave: (values: CourseInput) => Promise<void>;
 }) {
   const [values, setValues] = useState<CourseInput>(initial);
   const [slugTouched, setSlugTouched] = useState(Boolean(initial.slug));
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const [saved, setSaved] = useState(false);
 
   const set = <K extends keyof CourseInput>(key: K, value: CourseInput[K]) => {
-    setSaved(false);
     setValues((v) => ({ ...v, [key]: value }));
   };
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
     setSaving(true);
-    setError(null);
     setFieldErrors({});
     try {
       await onSave(values);
-      setSaved(true);
+      toast.success(successMessage);
     } catch (err) {
       if (err instanceof ApiError) {
         setFieldErrors(err.fieldErrors);
-        setError(err.code === "VALIDATION_FAILED" ? "Please fix the highlighted fields." : err.message);
+        toast.error(err.code === "VALIDATION_FAILED" ? "Please fix the highlighted fields." : err.message);
       } else {
-        setError("Something went wrong. Please try again.");
+        toast.error("Something went wrong. Please try again.");
       }
     } finally {
       setSaving(false);
@@ -147,7 +145,10 @@ export function CourseForm({
       </Card>
 
       <Card className="flex flex-col gap-4">
-        <h2 className="font-display text-lg font-semibold text-ink">Photo</h2>
+        <div>
+          <h2 className="font-display text-lg font-semibold text-ink">Built-in photo</h2>
+          <p className="text-sm text-muted">Used when no photo has been uploaded for this course.</p>
+        </div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           {Object.entries(courseImages).map(([key, image]) => (
             <button
@@ -177,8 +178,6 @@ export function CourseForm({
       </Card>
 
       <div className="sticky bottom-0 -mx-4 flex items-center justify-end gap-3 border-t border-line bg-canvas/95 px-4 py-4 backdrop-blur sm:-mx-8 sm:px-8">
-        {error && <Alert tone="error" className="mr-auto py-2">{error}</Alert>}
-        {saved && !error && <span className="mr-auto text-sm font-medium text-success">Saved</span>}
         <Button type="submit" size="lg" loading={saving}>
           {submitLabel}
         </Button>

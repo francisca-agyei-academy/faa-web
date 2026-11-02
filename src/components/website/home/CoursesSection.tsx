@@ -1,12 +1,16 @@
 import { ButtonLink } from "@/components/ui/Button";
 import { ArrowRight } from "@/components/ui/Icons";
 import { Reveal } from "@/components/ui/Reveal";
-import { courses } from "@/content/courses";
+import { featuredOf, getCatalog } from "@/lib/catalog";
 import { CourseCard } from "../CourseCard";
 import { SectionHeading } from "../SectionHeading";
 
-export function CoursesSection() {
-  const more = courses.filter((course) => course.status === "coming-soon").slice(0, 3);
+export async function CoursesSection() {
+  const courses = await getCatalog();
+  if (!courses?.length) return null;
+  const featured = featuredOf(courses);
+  const more = courses.filter((course) => course.slug !== featured?.slug).slice(0, 3);
+  if (!more.length) return null;
   return (
     <section className="py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

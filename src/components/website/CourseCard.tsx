@@ -1,12 +1,19 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Layers } from "@/components/ui/Icons";
-import type { Course } from "@/content/courses";
+import type { CatalogCourse } from "@/types/catalog";
+import { CourseImage } from "./CourseImage";
 
-export function StatusBadge({ status }: { status: Course["status"] }) {
-  return status === "available" ? (
-    <span className="rounded-full bg-accent px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-brand-strong">
-      Flagship course
+export function StatusBadge({ course }: { course: Pick<CatalogCourse, "isFeatured" | "enrollmentOpen"> }) {
+  if (course.isFeatured) {
+    return (
+      <span className="rounded-full bg-accent-strong px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
+        Flagship course
+      </span>
+    );
+  }
+  return course.enrollmentOpen ? (
+    <span className="rounded-full bg-success px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
+      Enrolling now
     </span>
   ) : (
     <span className="rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-brand">
@@ -15,9 +22,9 @@ export function StatusBadge({ status }: { status: Course["status"] }) {
   );
 }
 
-export function CourseCard({ course }: { course: Course }) {
-  const count = course.modules?.length ?? course.topics?.length ?? 0;
-  const unit = course.modules ? "modules" : "topics";
+export function CourseCard({ course }: { course: CatalogCourse }) {
+  const hasModules = course.modules.length > 0;
+  const count = hasModules ? course.modules.length : course.topics.length;
 
   return (
     <Link
@@ -25,27 +32,22 @@ export function CourseCard({ course }: { course: Course }) {
       className="group flex w-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-sm transition-all duration-500 ease-(--ease-premium) hover:-translate-y-1.5 hover:shadow-xl hover:shadow-brand/10"
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-brand-soft">
-        <Image
-          src={course.image}
-          alt={course.imageAlt}
-          fill
+        <CourseImage
+          course={course}
           sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"
-          placeholder="blur"
-          className="object-cover transition-transform duration-1000 ease-(--ease-premium) group-hover:scale-105"
+          className="transition-transform duration-1000 ease-(--ease-premium) group-hover:scale-105"
         />
         <div className="absolute left-4 top-4">
-          <StatusBadge status={course.status} />
+          <StatusBadge course={course} />
         </div>
       </div>
       <div className="flex flex-1 flex-col p-6">
-        <h3 className="font-display text-xl font-semibold leading-snug text-ink group-hover:text-brand">
-          {course.title}
-        </h3>
-        <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-muted">{course.summary}</p>
+        <h3 className="font-display text-xl font-semibold leading-snug text-ink group-hover:text-brand">{course.title}</h3>
+        <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-muted">{course.description}</p>
         <div className="mt-auto flex items-center justify-between pt-6 text-sm">
           <span className="inline-flex items-center gap-1.5 text-subtle">
             <Layers className="size-4" />
-            {count} {unit}
+            {count} {hasModules ? "modules" : "topics"}
           </span>
           <span className="inline-flex items-center gap-1 font-medium text-brand">
             View course <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />

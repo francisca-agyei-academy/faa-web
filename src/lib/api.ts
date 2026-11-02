@@ -36,6 +36,8 @@ export interface RequestOptions {
 }
 
 async function send<T>(path: string, options: RequestOptions, token: string | null): Promise<T> {
+  // FormData (file uploads) goes as-is so the browser sets the multipart boundary itself.
+  const isForm = options.body instanceof FormData;
   let res: Response;
   try {
     res = await fetch(`${API_BASE}${path}`, {
@@ -43,10 +45,10 @@ async function send<T>(path: string, options: RequestOptions, token: string | nu
       // Sends and accepts the refresh cookie on /auth routes.
       credentials: "include",
       headers: {
-        ...(options.body !== undefined && { "Content-Type": "application/json" }),
+        ...(options.body !== undefined && !isForm && { "Content-Type": "application/json" }),
         ...(token && { Authorization: `Bearer ${token}` }),
       },
-      body: options.body === undefined ? undefined : JSON.stringify(options.body),
+      body: options.body === undefined ? undefined : isForm ? (options.body as FormData) : JSON.stringify(options.body),
       signal: options.signal,
     });
   } catch (err) {

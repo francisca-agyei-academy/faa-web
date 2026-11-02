@@ -13,7 +13,7 @@ const variants: Record<Variant, string> = {
   "ghost-danger": "text-danger hover:bg-danger-soft disabled:text-subtle",
   danger: "bg-danger text-white hover:bg-danger/90 disabled:bg-danger/60",
   // For dark backgrounds
-  accent: "bg-accent text-brand-strong hover:bg-accent/90 disabled:bg-accent/60",
+  accent: "bg-accent-strong text-white hover:bg-accent disabled:bg-accent-strong/60",
   "outline-light": "border border-white/25 text-white hover:bg-white/10",
 };
 

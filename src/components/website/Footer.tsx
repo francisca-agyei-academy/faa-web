@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
 import { disclaimer, tagline } from "@/content/academy";
-import { courses } from "@/content/courses";
+import { getCatalog } from "@/lib/catalog";
 import { site } from "@/lib/site";
 
-export function Footer() {
+export async function Footer() {
+  const courses = (await getCatalog()) ?? [];
   return (
     <footer className="bg-brand-strong text-white">
       <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
@@ -30,12 +31,12 @@ export function Footer() {
             </li>
           </ul>
         </nav>
-        <nav aria-label="Academy">
-          <h2 className="font-display text-base font-semibold text-white">Academy</h2>
+        <nav aria-label="Gradvane Global">
+          <h2 className="font-display text-base font-semibold text-white">Explore</h2>
           <ul className="mt-4 flex flex-col gap-2.5 text-sm">
             <li>
               <Link href="/#about" className="text-white/75 hover:text-white">
-                About FAA
+                About us
               </Link>
             </li>
             <li>
@@ -64,7 +65,7 @@ export function Footer() {
               <li key={line}>{line}</li>
             ))}
           </ul>
-          <p className="mt-8 text-xs text-white/40">© {site.fullName}. All rights reserved.</p>
+          <p className="mt-8 text-xs text-white/40">© {site.name}. All rights reserved.</p>
         </div>
       </div>
     </footer>

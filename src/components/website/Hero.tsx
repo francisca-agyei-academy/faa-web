@@ -31,12 +31,10 @@ export function Hero() {
             className="animate-rise text-balance font-display text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl"
             style={delay(100)}
           >
-            Your path to a <span className="text-shimmer italic">fully&nbsp;funded</span> Master&apos;s or PhD abroad.
+            Your path to a <span className="text-shimmer">fully&nbsp;funded</span> Master&apos;s or PhD abroad.
           </h1>
           <p className="animate-rise mt-6 max-w-xl text-lg leading-relaxed text-white/75" style={delay(450)}>
-            Francisca Agyei Academy helps African students, recent graduates and emerging researchers navigate
-            scholarships, postgraduate study, research, publishing and international academic opportunities, with
-            practical guidance from someone who has walked the journey.
+            Gradvane Global equips students, recent graduates and emerging researchers with the knowledge, resources and guidance to navigate scholarships, postgraduate studies, research, academic publishing and international opportunities.
           </p>
           <div className="animate-rise mt-9 flex flex-wrap gap-3" style={delay(600)}>
             <ButtonLink href="/courses" size="lg" variant="accent">

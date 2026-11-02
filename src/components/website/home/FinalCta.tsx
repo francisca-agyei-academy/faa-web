@@ -20,7 +20,7 @@ export function FinalCta() {
           <div className="absolute inset-0 bg-linear-to-r from-brand-strong via-brand-strong/85 to-brand-strong/30" />
           <div className="relative max-w-2xl px-8 py-16 text-white sm:px-14 sm:py-24">
             <h2 className="font-display text-3xl font-semibold leading-tight sm:text-5xl">
-              You don&apos;t need it all figured out. You need the <span className="text-shimmer italic">next step.</span>
+              You don&apos;t need it all figured out. You need the <span className="text-shimmer">next step.</span>
             </h2>
             <p className="mt-5 text-lg text-white/75">
               Create a free account to save your progress and buy modules when you&apos;re ready.

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Alert } from "@/components/ui/Alert";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
@@ -38,12 +38,11 @@ export function ModuleManager({
   const [error, setError] = useState<string | null>(null);
 
   async function move(module: AdminModule, direction: "up" | "down") {
-    setError(null);
     try {
       await api(`/admin/modules/${module.id}/move`, { method: "POST", body: { direction } });
       onChange();
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Couldn't move the module.");
+      toast.error(err instanceof ApiError ? err.message : "Couldn't move the module.");
     }
   }
 
@@ -53,6 +52,7 @@ export function ModuleManager({
     setError(null);
     try {
       await api(`/admin/modules/${deleting.id}`, { method: "DELETE" });
+      toast.success(`“${deleting.title}” deleted.`);
       setDeleting(null);
       onChange();
     } catch (err) {
@@ -71,7 +71,6 @@ export function ModuleManager({
         </div>
         <Button onClick={() => setEditing("new")}>Add module</Button>
       </div>
-      {error && !deleting && <Alert tone="error" className="m-4">{error}</Alert>}
       {modules.length === 0 ? (
         <p className="px-6 py-10 text-center text-sm text-muted">
           No modules yet. Until you add some, the website lists this course&apos;s topics instead.
@@ -135,7 +134,7 @@ export function ModuleManager({
         confirmLabel="Delete module"
         danger
         busy={busy}
-        error={deleting ? error : null}
+        error={error}
         onConfirm={confirmDelete}
         onClose={() => {
           setDeleting(null);
@@ -161,7 +160,6 @@ function ModuleForm({ courseId, module, onDone }: { courseId: string; module: Ad
   });
   const [price, setPrice] = useState(pesewasToInput(initial.price));
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const set = <K extends keyof ModuleInput>(key: K, value: ModuleInput[K]) => setValues((v) => ({ ...v, [key]: value }));
 
@@ -173,19 +171,19 @@ function ModuleForm({ courseId, module, onDone }: { courseId: string; module: Ad
       return;
     }
     setSaving(true);
-    setError(null);
     setFieldErrors({});
     try {
       const body = { ...values, price: pesewas };
       if (module) await api(`/admin/modules/${module.id}`, { method: "PATCH", body });
       else await api(`/admin/courses/${courseId}/modules`, { method: "POST", body });
+      toast.success(module ? "Module saved." : "Module added.");
       onDone();
     } catch (err) {
       if (err instanceof ApiError) {
         setFieldErrors(err.fieldErrors);
-        setError(err.code === "VALIDATION_FAILED" ? "Please fix the highlighted fields." : err.message);
+        toast.error(err.code === "VALIDATION_FAILED" ? "Please fix the highlighted fields." : err.message);
       } else {
-        setError("Something went wrong. Please try again.");
+        toast.error("Something went wrong. Please try again.");
       }
       setSaving(false);
     }
@@ -193,7 +191,6 @@ function ModuleForm({ courseId, module, onDone }: { courseId: string; module: Ad
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
-      {error && <Alert tone="error">{error}</Alert>}
       <Input label="Title" value={values.title} error={fieldErrors.title} onChange={(e) => set("title", e.target.value)} />
       <Textarea label="Description (optional)" value={values.description ?? ""} error={fieldErrors.description} onChange={(e) => set("description", e.target.value)} />
       <div className="grid gap-5 sm:grid-cols-2">

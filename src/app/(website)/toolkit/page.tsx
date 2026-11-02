@@ -6,7 +6,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { ArrowRight, Document } from "@/components/ui/Icons";
 import { Reveal } from "@/components/ui/Reveal";
 import { toolkit } from "@/content/academy";
-import { featuredCourse } from "@/content/courses";
+import { featuredOf, getCatalog } from "@/lib/catalog";
 
 export const metadata: Metadata = {
   title: "Student Toolkit",
@@ -15,7 +15,9 @@ export const metadata: Metadata = {
 
 const delay = (ms: number) => ({ "--delay": `${ms}ms` }) as CSSProperties;
 
-export default function ToolkitPage() {
+export default async function ToolkitPage() {
+  const courses = await getCatalog();
+  const featured = courses?.length ? featuredOf(courses) : undefined;
   return (
     <>
       <section className="relative overflow-hidden bg-brand-strong text-white">
@@ -26,14 +28,14 @@ export default function ToolkitPage() {
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1.2fr_1fr] lg:px-8 lg:py-20">
           <div>
             <h1 className="animate-rise font-display text-4xl font-semibold leading-tight sm:text-5xl" style={delay(100)}>
-              The templates behind a <span className="text-shimmer italic">strong application</span>
+              The templates behind a <span className="text-shimmer">strong application</span>
             </h1>
             <p className="animate-rise mt-5 max-w-xl text-lg text-white/70" style={delay(250)}>
               Ten practical resources for every stage, from planning your search and contacting supervisors to
               preparing for interviews and moving abroad.
             </p>
             <div className="animate-rise" style={delay(400)}>
-              <ButtonLink href={`/courses/${featuredCourse.slug}`} variant="accent" size="lg" className="mt-8">
+              <ButtonLink href={featured ? `/courses/${featured.slug}` : "/courses"} variant="accent" size="lg" className="mt-8">
                 Included with the flagship course <ArrowRight className="size-4" />
               </ButtonLink>
             </div>

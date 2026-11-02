@@ -1,15 +1,16 @@
 // Site-wide names and navigation. Change the brand here.
 export const site = {
-  name: "FAA",
-  fullName: "Francisca Agyei Academy",
+  name: "Gradvane Global",
+  shortName: "Gradvane",
+  tagline: ["Learn", "Prepare", "Progress"] as const,
   description:
-    "Online courses helping African students and emerging researchers win scholarships, funded Master's and PhDs, publish research and build global academic careers.",
+    "Online courses and guidance for scholarships, funded Master's and PhDs, research, academic publishing and international opportunities.",
 };
 
 export const websiteNav = [
   { href: "/courses", label: "Courses" },
   { href: "/toolkit", label: "Student Toolkit" },
-  { href: "/#about", label: "About FAA" },
+  { href: "/#about", label: "About us" },
 ];
 
 export const studentNav = [

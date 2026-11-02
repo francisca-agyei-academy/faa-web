@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { useAuth } from "@/hooks/useAuth";
 import { ApiError } from "@/lib/api";
@@ -9,19 +10,28 @@ import { ApiError } from "@/lib/api";
 export function VerifyEmailBanner() {
   const { user, resendVerification, reloadUser } = useAuth();
   const [state, setState] = useState<"idle" | "sending" | "sent">("idle");
-  const [error, setError] = useState<string | null>(null);
 
   if (!user || user.isEmailVerified) return null;
 
   async function resend() {
     setState("sending");
-    setError(null);
     try {
       await resendVerification();
       setState("sent");
+      toast.success(`Confirmation link sent to ${user?.email}. Check your inbox.`);
     } catch (err) {
       setState("idle");
-      setError(err instanceof ApiError ? err.message : "Couldn't send the email. Please try again.");
+      toast.error(err instanceof ApiError ? err.message : "Couldn't send the email. Please try again.");
+    }
+  }
+
+  async function checkAgain() {
+    try {
+      const fresh = await reloadUser();
+      if (fresh?.isEmailVerified) toast.success("Email confirmed. You can buy modules now.");
+      else toast.info("We haven't seen the confirmation yet. Open the link in the email, then try again.");
+    } catch {
+      toast.error("Couldn't check right now. Please try again.");
     }
   }
 
@@ -31,10 +41,9 @@ export function VerifyEmailBanner() {
         {state === "sent"
           ? `We've sent a new link to ${user.email}.`
           : `Confirm your email address (${user.email}) to buy modules.`}
-        {error && <span className="ml-1 font-medium">{error}</span>}
       </p>
       <div className="flex gap-2">
-        <Button variant="secondary" size="sm" onClick={() => reloadUser().catch(() => {})}>
+        <Button variant="secondary" size="sm" onClick={checkAgain}>
           I&apos;ve confirmed it
         </Button>
         {state !== "sent" && (

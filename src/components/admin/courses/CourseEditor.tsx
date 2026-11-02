@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { Card, PageHeader } from "@/components/ui/Card";
 import { useApiQuery } from "@/hooks/useApiQuery";
@@ -10,6 +11,7 @@ import { api, ApiError } from "@/lib/api";
 import type { AdminCourse, CourseInput } from "@/types/admin";
 import { ConfirmDialog, QueryBoundary } from "../ui";
 import { CourseForm, emptyCourse } from "./CourseForm";
+import { CourseImageUploader } from "./CourseImageUploader";
 import { ModuleManager } from "./ModuleManager";
 
 const toInput = (c: AdminCourse): CourseInput => ({
@@ -39,6 +41,7 @@ export function NewCourse() {
       <CourseForm
         initial={emptyCourse}
         submitLabel="Create course"
+        successMessage="Course created. Upload a photo and add modules below."
         onSave={async (values) => {
           const { course } = await api<{ course: AdminCourse }>("/admin/courses", { method: "POST", body: values });
           router.replace(`/admin/courses/${course.id}`);
@@ -61,6 +64,7 @@ export function CourseEditor() {
     setDeleteError(null);
     try {
       await api(`/admin/courses/${id}`, { method: "DELETE" });
+      toast.success("Course deleted.");
       router.replace("/admin/courses");
     } catch (err) {
       setDeleteError(err instanceof ApiError ? err.message : "Couldn't delete the course.");
@@ -89,6 +93,7 @@ export function CourseEditor() {
                   await api(`/admin/courses/${id}`, { method: "PATCH", body: values });
                 }}
               />
+              <CourseImageUploader course={course} onChange={reload} />
               <ModuleManager courseId={course.id} modules={course.modules} onChange={reload} />
               <Card className="flex flex-wrap items-center justify-between gap-4 border-danger/30">
                 <div>

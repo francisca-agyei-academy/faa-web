@@ -1,10 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/Button";
 import { EmptyState, PageHeader } from "@/components/ui/Card";
-import { courseImageFor } from "@/content/courseImages";
+import { CourseImage } from "@/components/website/CourseImage";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import type { AdminCourseRow } from "@/types/admin";
 import { Badge, QueryBoundary, Table, Td, Th } from "../ui";
@@ -41,14 +40,9 @@ export function CourseList() {
                   <Td className="text-subtle">{course.sortOrder}</Td>
                   <Td>
                     <Link href={`/admin/courses/${course.id}`} className="flex items-center gap-3">
-                      <Image
-                        src={courseImageFor(course.imageKey).src}
-                        alt=""
-                        width={56}
-                        height={40}
-                        placeholder="blur"
-                        className="h-10 w-14 rounded-md object-cover"
-                      />
+                      <span className="relative h-10 w-14 shrink-0 overflow-hidden rounded-md">
+                        <CourseImage course={course} sizes="56px" />
+                      </span>
                       <span className="min-w-0">
                         <span className="block font-medium text-ink hover:text-brand">{course.title}</span>
                         <span className="block text-xs text-subtle">{course.track || "No track"} · /{course.slug}</span>

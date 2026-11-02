@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { Fraunces, Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import { AuthBootstrap } from "@/components/AuthBootstrap";
+import { Toaster } from "@/components/ui/Toaster";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -14,15 +15,19 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Serif for headings; gives the site its premium, academic feel.
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+// Bold geometric sans for headings, matching the Gradvane Global wordmark.
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: { default: `${site.fullName} | Scholarships, Master's, PhDs & Research`, template: `%s · ${site.fullName}` },
+  title: {
+    default: `${site.name} | Scholarships, Master's, PhDs & Research`,
+    template: `%s · ${site.name}`,
+  },
   description: site.description,
+  applicationName: site.name,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -30,7 +35,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     // suppressHydrationWarning: the inline script adds the "js" class before React hydrates.
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${jakarta.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>
@@ -40,6 +45,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col font-sans">
         <AuthBootstrap />
         {children}
+        <Toaster />
       </body>
     </html>
   );

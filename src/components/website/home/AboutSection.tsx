@@ -24,13 +24,14 @@ export function AboutSection() {
               <span aria-hidden="true" className="font-display text-5xl leading-none text-accent">
                 &ldquo;
               </span>
-              <blockquote className="-mt-3 font-display text-lg leading-relaxed">{philosophy}</blockquote>
+              <blockquote className="-mt-3 font-display text-base font-medium leading-relaxed sm:text-lg">{philosophy}</blockquote>
+              <figcaption className="mt-4 text-sm font-semibold text-lavender">Our philosophy</figcaption>
             </figure>
           </Reveal>
         </Reveal>
 
         <div>
-          <SectionHeading title="Practical guidance for going global with your studies">
+          <SectionHeading title="What is Gradvane Global?">
             <p>{about}</p>
           </SectionHeading>
           <div className="mt-10 flex flex-col gap-6">
