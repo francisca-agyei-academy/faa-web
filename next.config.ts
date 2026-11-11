@@ -4,8 +4,16 @@ import type { NextConfig } from "next";
 // domain set in NEXT_PUBLIC_MEDIA_URL (e.g. https://media.example.com).
 const mediaHost = process.env.NEXT_PUBLIC_MEDIA_URL ? new URL(process.env.NEXT_PUBLIC_MEDIA_URL).hostname : null;
 
+// When API_PROXY_URL is set (staging/production), the browser calls the API through this
+// site at /api/v1/*, so the auth cookies are first-party and no CORS is involved. Set
+// NEXT_PUBLIC_API_URL="/" alongside it. Locally the browser calls the API on :4000 directly.
+const apiProxy = process.env.API_PROXY_URL?.replace(/\/+$/, "");
+
 const nextConfig: NextConfig = {
   cacheComponents: true,
+  async rewrites() {
+    return apiProxy ? [{ source: "/api/v1/:path*", destination: `${apiProxy}/api/v1/:path*` }] : [];
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "**.r2.dev" },

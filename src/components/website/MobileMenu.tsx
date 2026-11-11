@@ -39,8 +39,8 @@ export function MobileMenu() {
               </li>
             ))}
           </ul>
-          <div className="mt-5" onClick={() => setOpen(false)}>
-            <NavbarAuth />
+          <div className="mt-5">
+            <NavbarAuth inline onNavigate={() => setOpen(false)} />
           </div>
         </div>
       )}
