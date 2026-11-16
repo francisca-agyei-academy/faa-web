@@ -88,11 +88,12 @@ export async function FeaturedCourse() {
               {/* A different photo from the hero, so the graduation image isn't shown twice */}
               <Image
                 src={laptopClassroom}
-                alt="Students from different backgrounds talking in a lecture hall"
+                alt="A diverse group of students cheering around a laptop"
                 fill
                 sizes="(min-width: 1024px) 560px, 100vw"
                 placeholder="blur"
-                className="object-cover object-[60%_center] transition-transform duration-[1.2s] [transition-timing-function:var(--ease-premium)] group-hover:scale-105"
+                quality={90}
+                className="object-cover object-center transition-transform duration-[1.2s] [transition-timing-function:var(--ease-premium)] group-hover:scale-105"
               />
             </div>
             <div className="flex flex-col p-8 sm:p-12">

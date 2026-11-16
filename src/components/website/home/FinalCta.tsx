@@ -11,11 +11,12 @@ export function FinalCta() {
         <div className="group relative overflow-hidden rounded-4xl bg-brand-strong">
           <Image
             src={groupSteps}
-            alt="A diverse group of students smiling around a laptop"
+            alt="A diverse group of students walking and laughing together"
             fill
             sizes="(min-width: 1280px) 1280px, 100vw"
             placeholder="blur"
-            className="object-cover object-[center_30%] opacity-40 transition-transform duration-[2s] ease-(--ease-premium) group-hover:scale-105"
+            quality={90}
+            className="object-cover object-[center_45%] opacity-40 transition-transform duration-[2s] ease-(--ease-premium) group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-linear-to-r from-brand-strong via-brand-strong/85 to-brand-strong/30" />
           <div className="relative max-w-2xl px-8 py-16 text-white sm:px-14 sm:py-24">

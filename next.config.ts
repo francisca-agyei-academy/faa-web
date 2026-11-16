@@ -15,6 +15,8 @@ const nextConfig: NextConfig = {
     return apiProxy ? [{ source: "/api/v1/:path*", destination: `${apiProxy}/api/v1/:path*` }] : [];
   },
   images: {
+    // 90 is used for the large website photos so they stay crisp on high-resolution screens.
+    qualities: [75, 90],
     remotePatterns: [
       { protocol: "https", hostname: "**.r2.dev" },
       ...(mediaHost ? [{ protocol: "https" as const, hostname: mediaHost }] : []),

@@ -16,6 +16,7 @@ export function AboutSection() {
               fill
               sizes="(min-width: 1024px) 600px, 100vw"
               placeholder="blur"
+              quality={90}
               className="object-cover transition-transform duration-[1.2s] [transition-timing-function:var(--ease-premium)] group-hover:scale-105"
             />
           </div>

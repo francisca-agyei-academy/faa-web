@@ -54,6 +54,7 @@ export function Hero() {
               fill
               sizes="(min-width: 1024px) 480px, 90vw"
               placeholder="blur"
+              quality={90}
               loading="eager"
               fetchPriority="high"
               className="animate-settle object-cover object-[65%_center]"
@@ -69,6 +70,7 @@ export function Hero() {
               alt="A student working on a laptop on a campus bench"
               sizes="208px"
               placeholder="blur"
+              quality={90}
               className="aspect-[4/5] object-cover object-[70%_center]"
             />
           </div>

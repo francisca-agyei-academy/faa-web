@@ -50,6 +50,7 @@ export default async function ToolkitPage() {
               fill
               sizes="520px"
               placeholder="blur"
+              quality={90}
               loading="eager"
               className="animate-settle object-cover"
             />

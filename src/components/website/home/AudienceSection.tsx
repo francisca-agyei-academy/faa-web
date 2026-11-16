@@ -29,6 +29,7 @@ export function AudienceSection() {
                     fill
                     sizes="(min-width: 1024px) 260px, (min-width: 640px) 40vw, 100vw"
                     placeholder="blur"
+                    quality={90}
                     className={`object-cover ${images[index % images.length]!.position} transition-transform duration-700 group-hover:scale-105`}
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-brand-strong/70 via-brand-strong/10 to-transparent" />

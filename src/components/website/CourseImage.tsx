@@ -24,6 +24,7 @@ export function CourseImage({
         alt={course.title}
         fill
         sizes={sizes}
+        quality={90}
         loading={eager ? "eager" : undefined}
         className={cn("object-cover", className)}
       />
@@ -36,6 +37,7 @@ export function CourseImage({
       alt={preset.alt}
       fill
       sizes={sizes}
+      quality={90}
       placeholder="blur"
       loading={eager ? "eager" : undefined}
       className={cn("object-cover", className)}

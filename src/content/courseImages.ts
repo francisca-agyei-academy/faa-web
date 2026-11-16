@@ -13,9 +13,9 @@ import writing from "@/assets/images/student-writing-headphones.jpg";
 export const courseImages: Record<string, { src: StaticImageData; alt: string; label: string }> = {
   graduate: { src: graduate, alt: "A diverse group of graduates tossing their caps", label: "Graduates" },
   "laptop-campus": { src: laptopCampus, alt: "A student working on a laptop on a campus bench", label: "Laptop on campus" },
-  "laptop-classroom": { src: laptopClassroom, alt: "Students from different backgrounds talking in a lecture hall", label: "Lecture hall" },
+  "laptop-classroom": { src: laptopClassroom, alt: "A diverse group of students cheering around a laptop", label: "Group at a laptop" },
   "reading-desk": { src: readingDesk, alt: "Three students studying together with laptops", label: "Studying together" },
-  "group-steps": { src: groupSteps, alt: "A diverse group of students around a laptop", label: "Student group" },
+  "group-steps": { src: groupSteps, alt: "A diverse group of students walking and laughing together", label: "Student group" },
   writing: { src: writing, alt: "A student writing notes beside a laptop", label: "Writing notes" },
 };
 
