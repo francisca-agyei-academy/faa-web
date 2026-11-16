@@ -18,7 +18,6 @@ export function EnrolCard({ course }: { course: CatalogCourse }) {
     hasModules ? `${course.modules.length} self-paced modules` : "Self-paced lessons",
     "Learn on any device",
     ...(course.includesToolkit ? ["Student Toolkit: 10 templates and trackers"] : []),
-    ...(course.includesSignatureBonus ? ["Signature bonus: Ghana → Australia case study"] : []),
   ];
 
   return (

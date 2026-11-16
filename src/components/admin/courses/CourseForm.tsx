@@ -174,7 +174,6 @@ export function CourseForm({
         <Switch label="Flagship course" description="Highlight it as the featured course." checked={values.isFeatured} onChange={(v) => set("isFeatured", v)} />
         <Switch label="Enrolment open" description="Students can buy modules. When off, the course shows “Coming soon”." checked={values.enrollmentOpen} onChange={(v) => set("enrollmentOpen", v)} />
         <Switch label="Includes the Student Toolkit" checked={values.includesToolkit} onChange={(v) => set("includesToolkit", v)} />
-        <Switch label="Includes the signature bonus" description="Francisca's Journey: Ghana → Australia" checked={values.includesSignatureBonus} onChange={(v) => set("includesSignatureBonus", v)} />
       </Card>
 
       <div className="sticky bottom-0 -mx-4 flex items-center justify-end gap-3 border-t border-line bg-canvas/95 px-4 py-4 backdrop-blur sm:-mx-8 sm:px-8">

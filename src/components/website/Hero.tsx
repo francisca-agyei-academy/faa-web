@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import graduate from "@/assets/images/graduate-cap-toss.jpg";
 import laptopCampus from "@/assets/images/student-laptop-campus.jpg";
 import { ButtonLink } from "@/components/ui/Button";
-import { ArrowRight, Plane, Sparkle } from "@/components/ui/Icons";
+import { ArrowRight, Sparkle } from "@/components/ui/Icons";
 import { coreLessons } from "@/content/academy";
 
 const delay = (ms: number) => ({ "--delay": `${ms}ms` }) as CSSProperties;
@@ -50,13 +50,13 @@ export function Hero() {
           <div className="relative aspect-[4/5] overflow-hidden rounded-4xl shadow-2xl shadow-black/40 ring-1 ring-white/10 lg:ml-auto lg:w-[85%]">
             <Image
               src={graduate}
-              alt="A graduate in a black and red gown celebrating by tossing her cap"
+              alt="A diverse group of graduates tossing their caps outside a university"
               fill
               sizes="(min-width: 1024px) 480px, 90vw"
               placeholder="blur"
               loading="eager"
               fetchPriority="high"
-              className="animate-settle object-cover object-top"
+              className="animate-settle object-cover object-[65%_center]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-brand-strong/40 via-transparent to-transparent" />
           </div>
@@ -66,17 +66,11 @@ export function Hero() {
           >
             <Image
               src={laptopCampus}
-              alt="A student working on a laptop on campus"
+              alt="A student working on a laptop on a campus bench"
               sizes="208px"
               placeholder="blur"
-              className="aspect-[4/5] object-cover"
+              className="aspect-[4/5] object-cover object-[70%_center]"
             />
-          </div>
-          <div className="animate-float absolute -right-2 top-8 max-w-[220px] rounded-2xl bg-surface p-4 text-ink shadow-xl sm:right-0 lg:-right-6">
-            <div className="flex items-center gap-2 text-sm font-semibold text-accent-strong">
-              <Plane className="size-4" /> Ghana → Australia
-            </div>
-            <p className="mt-1.5 text-sm leading-snug text-muted">Learn from a real journey to a funded PhD.</p>
           </div>
         </div>
       </div>

@@ -7,7 +7,7 @@ import { audienceIntro, audiences } from "@/content/academy";
 import { SectionHeading } from "../SectionHeading";
 
 const images = [
-  { src: laptopCampus, alt: "A student researching opportunities on a laptop", position: "object-top" },
+  { src: laptopCampus, alt: "A student researching opportunities on a laptop", position: "object-[70%_center]" },
   { src: writing, alt: "A researcher writing notes beside a laptop", position: "object-center" },
 ];
 

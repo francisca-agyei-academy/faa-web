@@ -11,7 +11,7 @@ export function FinalCta() {
         <div className="group relative overflow-hidden rounded-4xl bg-brand-strong">
           <Image
             src={groupSteps}
-            alt="A group of smiling students on campus steps"
+            alt="A diverse group of students smiling around a laptop"
             fill
             sizes="(min-width: 1280px) 1280px, 100vw"
             placeholder="blur"

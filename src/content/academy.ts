@@ -52,11 +52,6 @@ export const audiences = [
   },
 ];
 
-export const signatureBonus = {
-  title: "Francisca's Journey: Ghana → Australia",
-  body: "A transparent case study showing how the process can work in real life: lessons from Ghana to Australia, PhD life, research growth and behind-the-scenes learning.",
-};
-
 export const disclaimer = [
   "We do not guarantee scholarships, admissions or visas.",
   "We clearly distinguish personal experience from official university and government requirements.",

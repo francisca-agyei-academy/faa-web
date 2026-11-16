@@ -12,7 +12,7 @@ export function AboutSection() {
           <div className="group relative aspect-[4/3] overflow-hidden rounded-4xl">
             <Image
               src={readingDesk}
-              alt="A student reading thoughtfully at a desk beside a laptop"
+              alt="Three students laughing together over their laptops"
               fill
               sizes="(min-width: 1024px) 600px, 100vw"
               placeholder="blur"

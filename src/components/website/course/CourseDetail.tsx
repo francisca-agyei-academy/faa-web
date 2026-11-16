@@ -1,8 +1,8 @@
 import type { CSSProperties } from "react";
 import Link from "next/link";
-import { Check, Clock, Document, Globe, Layers, Plane, Shield, Sparkle } from "@/components/ui/Icons";
+import { Check, Clock, Document, Globe, Layers, Shield, Sparkle } from "@/components/ui/Icons";
 import { Reveal } from "@/components/ui/Reveal";
-import { disclaimer, signatureBonus, toolkit } from "@/content/academy";
+import { disclaimer, toolkit } from "@/content/academy";
 import type { CatalogCourse } from "@/types/catalog";
 import { CourseCard, StatusBadge } from "../CourseCard";
 import { CourseImage } from "../CourseImage";
@@ -118,14 +118,6 @@ export function CourseDetail({ course, related }: { course: CatalogCourse; relat
               </ul>
             )}
           </Reveal>
-
-          {course.includesSignatureBonus && (
-            <Reveal as="section" className="relative overflow-hidden rounded-2xl bg-brand p-8 text-white">
-              <div aria-hidden="true" className="absolute -right-20 -top-20 size-64 rounded-full bg-accent/20 blur-3xl" />
-              <h2 className="relative inline-flex items-center gap-3 font-display text-2xl font-semibold"><Plane className="size-6 text-accent" />{signatureBonus.title}</h2>
-              <p className="relative mt-3 leading-relaxed text-white/75">{signatureBonus.body}</p>
-            </Reveal>
-          )}
 
           {course.includesToolkit && (
             <Reveal as="section">
