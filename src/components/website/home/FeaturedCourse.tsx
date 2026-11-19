@@ -1,15 +1,16 @@
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import laptopClassroom from "@/assets/images/student-laptop-classroom.jpg";
 import { ButtonLink } from "@/components/ui/Button";
 import { ArrowRight, Layers, Sparkle } from "@/components/ui/Icons";
 import { Reveal } from "@/components/ui/Reveal";
 import { featuredOf, getCatalog } from "@/lib/catalog";
-import { formatPrice } from "@/lib/utils";
-import type { CatalogModule } from "@/types/catalog";
+import { cn, formatPrice } from "@/lib/utils";
+import type { CatalogCourse, CatalogModule } from "@/types/catalog";
+import { CourseImage } from "../CourseImage";
 import { SectionHeading } from "../SectionHeading";
 
-/** One module as a card, in the same style as the course cards further down the page. */
+/** One module as a card, in the same style as the course cards. */
 function ModuleCard({ module, number, href }: { module: CatalogModule; number: number; href: string }) {
   const label = String(number).padStart(2, "0");
   const hasPrice = module.price !== null && module.price > 0;
@@ -66,37 +67,65 @@ function ModuleCard({ module, number, href }: { module: CatalogModule; number: n
   );
 }
 
-export async function FeaturedCourse() {
-  const courses = await getCatalog();
-  if (!courses?.length) return null;
-  const course = featuredOf(courses)!;
+const photoClass =
+  "object-cover object-center transition-transform duration-[1.2s] ease-(--ease-premium) group-hover:scale-105";
+
+/**
+ * A course shown in full on the home page: a photo-and-summary panel, then every module as a card.
+ * `photo` overrides the course's own image (the flagship uses a photo that isn't in the hero).
+ */
+export function CourseSpotlight({
+  course,
+  heading,
+  photo,
+  onSurface = false,
+}: {
+  course: CatalogCourse;
+  heading: string;
+  photo?: { src: StaticImageData; alt: string };
+  /** True when the section background is the surface colour, so the panel uses the canvas colour. */
+  onSurface?: boolean;
+}) {
   const href = `/courses/${course.slug}`;
   const outcome = course.outcomeFrom && course.outcomeTo ? { from: course.outcomeFrom, to: course.outcomeTo } : null;
   const modules = [...course.modules].sort((a, b) => a.order - b.order);
   // Four across when the modules fill whole rows of four (e.g. 8), otherwise three.
   const columns = modules.length % 4 === 0 ? 4 : 3;
   return (
-    <section className="bg-surface py-20 sm:py-28">
+    <section className={cn("py-20 sm:py-28", onSurface && "bg-surface")}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading title="Start with our flagship course">
+        <SectionHeading title={heading}>
           <p>{course.description}</p>
         </SectionHeading>
 
         <Reveal className="mt-12">
-          <div className="group grid overflow-hidden rounded-4xl border border-line bg-canvas lg:grid-cols-[0.9fr_1.1fr]">
+          <div
+            className={cn(
+              "group grid overflow-hidden rounded-4xl border border-line lg:grid-cols-[0.9fr_1.1fr]",
+              onSurface ? "bg-canvas" : "bg-surface shadow-sm",
+            )}
+          >
             <div className="relative min-h-80 overflow-hidden">
-              {/* A different photo from the hero, so the graduation image isn't shown twice */}
-              <Image
-                src={laptopClassroom}
-                alt="A diverse group of students cheering around a laptop"
-                fill
-                sizes="(min-width: 1024px) 560px, 100vw"
-                placeholder="blur"
-                quality={90}
-                className="object-cover object-center transition-transform duration-[1.2s] [transition-timing-function:var(--ease-premium)] group-hover:scale-105"
-              />
+              {photo ? (
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  fill
+                  sizes="(min-width: 1024px) 560px, 100vw"
+                  placeholder="blur"
+                  quality={90}
+                  className={photoClass}
+                />
+              ) : (
+                <CourseImage course={course} sizes="(min-width: 1024px) 560px, 100vw" className={photoClass} />
+              )}
             </div>
             <div className="flex flex-col p-8 sm:p-12">
+              {!course.enrollmentOpen && (
+                <span className="mb-4 w-fit rounded-full bg-brand-soft px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-brand">
+                  Coming soon
+                </span>
+              )}
               <h3 className="font-display text-3xl font-semibold leading-tight text-ink">{course.title}</h3>
               {outcome && (
                 <div className="mt-8 grid gap-4 sm:grid-cols-2">
@@ -117,9 +146,11 @@ export async function FeaturedCourse() {
                 <span className="inline-flex items-center gap-2 text-sm text-muted">
                   <Layers className="size-4" /> Buy module by module
                 </span>
-                <span className="inline-flex items-center gap-2 text-sm text-muted">
-                  <Sparkle className="size-4" /> Includes the Student Toolkit
-                </span>
+                {course.includesToolkit && (
+                  <span className="inline-flex items-center gap-2 text-sm text-muted">
+                    <Sparkle className="size-4" /> Includes the Student Toolkit
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -144,5 +175,19 @@ export async function FeaturedCourse() {
         )}
       </div>
     </section>
+  );
+}
+
+export async function FeaturedCourse() {
+  const courses = await getCatalog();
+  if (!courses?.length) return null;
+  return (
+    <CourseSpotlight
+      course={featuredOf(courses)!}
+      heading="Start with our flagship course"
+      // A different photo from the hero, so the graduation image isn't shown twice
+      photo={{ src: laptopClassroom, alt: "A diverse group of students cheering around a laptop" }}
+      onSurface
+    />
   );
 }
