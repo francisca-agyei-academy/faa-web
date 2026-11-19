@@ -35,12 +35,12 @@ export function AboutSection() {
           <SectionHeading title="What is Gradvane Global?">
             <p>{about}</p>
           </SectionHeading>
-          <div className="mt-10 flex flex-col gap-6">
+          <div className="mt-10 flex flex-col gap-8">
             {pillars.map((pillar, index) => (
               <Reveal key={pillar.title} delay={150 + index * 120}>
-                <div className="border-l-2 border-accent pl-5">
-                  <h3 className="font-display text-lg font-semibold text-ink">{pillar.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted">{pillar.body}</p>
+                <div className="border-l-4 border-accent pl-6">
+                  <h3 className="font-display text-2xl font-semibold text-ink">{pillar.title}</h3>
+                  <p className="mt-2 text-base leading-relaxed text-muted sm:text-lg">{pillar.body}</p>
                 </div>
               </Reveal>
             ))}

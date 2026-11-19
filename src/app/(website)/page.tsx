@@ -4,7 +4,6 @@ import { AudienceSection } from "@/components/website/home/AudienceSection";
 import { CoursesSection } from "@/components/website/home/CoursesSection";
 import { FeaturedCourse } from "@/components/website/home/FeaturedCourse";
 import { FinalCta } from "@/components/website/home/FinalCta";
-import { ToolkitSection } from "@/components/website/home/ToolkitSection";
 
 // Order follows the brief: who Gradvane Global is, what it offers, who it's for, then how to start.
 export default function HomePage() {
@@ -15,7 +14,6 @@ export default function HomePage() {
       <AudienceSection />
       <FeaturedCourse />
       <CoursesSection />
-      <ToolkitSection />
       <FinalCta />
     </>
   );

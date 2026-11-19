@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
 import { disclaimer, tagline } from "@/content/academy";
 import { getCatalog } from "@/lib/catalog";
-import { site } from "@/lib/site";
+import { legalNav, site } from "@/lib/site";
 
 export async function Footer() {
   const courses = (await getCatalog()) ?? [];
@@ -65,7 +65,22 @@ export async function Footer() {
               <li key={line}>{line}</li>
             ))}
           </ul>
-          <p className="mt-8 text-xs text-white/40">© {site.name}. All rights reserved.</p>
+          <div className="mt-8 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-white/50">
+              © {site.copyrightYear} {site.name}. All rights reserved.
+            </p>
+            <nav aria-label="Legal">
+              <ul className="flex flex-wrap gap-x-6 gap-y-2">
+                {legalNav.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} className="text-white/70 hover:text-white">
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
         </div>
       </div>
     </footer>

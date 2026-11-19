@@ -5,7 +5,15 @@ export const site = {
   tagline: ["Learn", "Prepare", "Progress"] as const,
   description:
     "Online courses and guidance for scholarships, funded Master's and PhDs, research, academic publishing and international opportunities.",
+  /** Shown on the Privacy Policy and Terms pages. Leave empty until there is a public contact address. */
+  contactEmail: "",
+  copyrightYear: 2026,
 };
+
+export const legalNav = [
+  { href: "/privacy", label: "Privacy Policy" },
+  { href: "/terms", label: "Terms and Conditions" },
+];
 
 export const websiteNav = [
   { href: "/courses", label: "Courses" },

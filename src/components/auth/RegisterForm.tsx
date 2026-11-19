@@ -73,6 +73,17 @@ export function RegisterForm() {
       <Button type="submit" size="lg" loading={submitting} disabled={!hydrated}>
         Create account
       </Button>
+      <p className="text-center text-xs leading-relaxed text-subtle">
+        By creating an account, you agree to our{" "}
+        <Link href="/terms" className="font-medium text-brand hover:underline">
+          Terms and Conditions
+        </Link>{" "}
+        and{" "}
+        <Link href="/privacy" className="font-medium text-brand hover:underline">
+          Privacy Policy
+        </Link>
+        .
+      </p>
       <p className="text-center text-sm text-muted">
         Already have an account?{" "}
         <Link href="/login" className="font-medium text-brand hover:underline">
