@@ -82,28 +82,14 @@ export function CourseDetail({ course, related }: { course: CatalogCourse; relat
             </Reveal>
           )}
 
-          {hasModules && (
-            <Reveal as="section" className="rounded-2xl border border-line bg-surface p-7">
-              <h2 className="font-display text-2xl font-semibold text-ink">What you&apos;ll learn</h2>
-              <ul className="mt-5 grid gap-x-8 gap-y-3 sm:grid-cols-2">
-                {course.modules.map((m) => (
-                  <li key={m.id} className="flex gap-3 text-sm leading-relaxed text-ink">
-                    <Check className="mt-0.5 size-4 shrink-0 text-success" />
-                    {m.title}
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-          )}
-
           <Reveal as="section" className="scroll-mt-24">
-            <div id="modules" className="flex flex-wrap items-baseline justify-between gap-2">
-              <h2 className="font-display text-2xl font-semibold text-ink">
-                {hasModules ? "Course modules" : "What this course will cover"}
+            <div id="modules" className="flex flex-wrap items-end justify-between gap-2">
+              <h2 className="font-display text-3xl font-semibold text-ink">
+                {hasModules
+                  ? `${course.modules.length} ${course.modules.length === 1 ? "module" : "modules"} in this course`
+                  : "What this course will cover"}
               </h2>
-              {hasModules && (
-                <p className="text-sm text-muted">Each module has its own price and access period.</p>
-              )}
+              {hasModules && <p className="text-sm text-muted">Buy the ones you need, one module at a time.</p>}
             </div>
             {hasModules ? (
               <ModuleList modules={course.modules} enrollmentOpen={course.enrollmentOpen} />
