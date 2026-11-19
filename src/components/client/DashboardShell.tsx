@@ -44,7 +44,7 @@ export function DashboardShell({
   return (
     <div className="flex flex-1 flex-col">
       <Sidebar items={nav} homeHref={homeHref} badge={badge} open={menuOpen} onClose={() => setMenuOpen(false)} />
-      <div className="flex min-w-0 flex-1 flex-col md:pl-64">
+      <div className="flex min-w-0 flex-1 flex-col md:pl-68">
         <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-between gap-4 border-b border-line bg-surface/90 px-4 backdrop-blur sm:px-8">
           <button
             type="button"

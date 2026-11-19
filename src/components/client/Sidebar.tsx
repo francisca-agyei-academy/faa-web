@@ -63,22 +63,17 @@ export function Sidebar({
       />
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-line bg-surface transition-transform duration-300 ease-(--ease-premium)",
+          "fixed inset-y-0 left-0 z-50 flex w-80 max-w-[85vw] flex-col border-r border-line bg-surface transition-transform duration-300 ease-(--ease-premium)",
           open ? "translate-x-0 shadow-2xl" : "-translate-x-full",
-          "md:translate-x-0 md:shadow-none",
+          "md:w-68 md:translate-x-0 md:shadow-none",
         )}
       >
         <div className="flex h-16 shrink-0 items-center justify-between gap-2 border-b border-line px-5">
-          <div className="flex items-center gap-2">
-            <Logo href={homeHref} />
-            {badge && (
-              <span className="rounded-md bg-accent/15 px-2 py-0.5 text-xs font-medium text-accent-strong">{badge}</span>
-            )}
-          </div>
+          <Logo href={homeHref} />
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-subtle hover:bg-canvas hover:text-ink md:hidden"
+            className="shrink-0 rounded-lg p-1.5 text-subtle hover:bg-canvas hover:text-ink md:hidden"
             aria-label="Close menu"
           >
             <Close className="size-5" />
@@ -86,6 +81,14 @@ export function Sidebar({
         </div>
 
         <nav aria-label="Dashboard" className="flex-1 overflow-y-auto px-3 py-5">
+          {/* Which side of the app this is, e.g. "Admin panel"; kept out of the header so the logo fits */}
+          {badge && (
+            <p className="mb-3 px-3">
+              <span className="rounded-md bg-accent/15 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-accent-strong">
+                {badge}
+              </span>
+            </p>
+          )}
           <ul className="flex flex-col gap-1">
             {items.map((item) => {
               const Icon = item.icon ? icons[item.icon] : null;

@@ -10,7 +10,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <Suspense fallback={<PageSpinner />}>
       <AuthGuard role="ADMIN">
-        <DashboardShell nav={adminNav} homeHref="/admin" badge="Admin" showVerifyBanner={false}>
+        <DashboardShell nav={adminNav} homeHref="/admin" badge="Admin panel" showVerifyBanner={false}>
           {children}
         </DashboardShell>
       </AuthGuard>
