@@ -21,16 +21,19 @@ export const websiteNav = [
   { href: "/#about", label: "About us" },
 ];
 
-export const studentNav = [
-  { href: "/dashboard", label: "Overview" },
-  { href: "/my-courses", label: "My courses" },
-  { href: "/courses", label: "Browse courses" },
-  { href: "/account", label: "Account settings" },
+/** Icon names map to components in the dashboard sidebar. */
+export type NavIcon = "home" | "book" | "layers" | "users" | "receipt" | "settings" | "globe";
+
+export const studentNav: { href: string; label: string; icon: NavIcon }[] = [
+  { href: "/dashboard", label: "Overview", icon: "home" },
+  { href: "/my-courses", label: "My courses", icon: "book" },
+  { href: "/courses", label: "Browse courses", icon: "globe" },
+  { href: "/account", label: "Account settings", icon: "settings" },
 ];
 
-export const adminNav = [
-  { href: "/admin", label: "Dashboard" },
-  { href: "/admin/courses", label: "Courses" },
-  { href: "/admin/students", label: "Students" },
-  { href: "/admin/orders", label: "Orders" },
+export const adminNav: { href: string; label: string; icon: NavIcon }[] = [
+  { href: "/admin", label: "Dashboard", icon: "home" },
+  { href: "/admin/courses", label: "Courses", icon: "layers" },
+  { href: "/admin/students", label: "Students", icon: "users" },
+  { href: "/admin/orders", label: "Orders", icon: "receipt" },
 ];
