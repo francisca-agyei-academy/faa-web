@@ -24,6 +24,8 @@ export const websiteNav = [
 export const studentNav = [
   { href: "/dashboard", label: "Overview" },
   { href: "/my-courses", label: "My courses" },
+  { href: "/courses", label: "Browse courses" },
+  { href: "/account", label: "Account settings" },
 ];
 
 export const adminNav = [

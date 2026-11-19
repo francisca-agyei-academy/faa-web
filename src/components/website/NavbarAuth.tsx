@@ -16,11 +16,13 @@ const menuLinks = (user: User) =>
         { href: "/admin", label: "Admin panel" },
         { href: "/admin/courses", label: "Manage courses" },
         { href: "/admin/orders", label: "Orders" },
+        { href: "/account", label: "Account settings" },
       ]
     : [
         { href: "/dashboard", label: "Dashboard" },
         { href: "/my-courses", label: "My courses" },
         { href: "/courses", label: "Browse courses" },
+        { href: "/account", label: "Account settings" },
       ];
 
 /** Login/sign-up buttons, or the signed-in user's avatar menu. `inline` lays it out for the mobile drawer. */

@@ -5,6 +5,7 @@ import { Check } from "@/components/ui/Icons";
 import { useAuth } from "@/hooks/useAuth";
 import { formatPrice } from "@/lib/utils";
 import type { CatalogCourse } from "@/types/catalog";
+import { BuyModuleButton } from "./BuyModuleButton";
 
 /** Pricing summary and the call to action; adapts to whether the visitor is logged in. */
 export function EnrolCard({ course }: { course: CatalogCourse }) {
@@ -13,6 +14,11 @@ export function EnrolCard({ course }: { course: CatalogCourse }) {
   const prices = course.modules.map((m) => m.price).filter((p): p is number => p !== null && p > 0);
   const from = prices.length ? Math.min(...prices) : null;
   const open = course.enrollmentOpen && from !== null;
+  // The whole course can be bought once every module has a price and an access period.
+  const fullCourse =
+    open && hasModules && course.modules.every((m) => m.price !== null && m.price > 0 && m.accessDays !== null)
+      ? course.modules.reduce((sum, m) => sum + m.price!, 0)
+      : null;
 
   const includes = [
     hasModules ? `${course.modules.length} self-paced modules` : "Self-paced lessons",
@@ -22,7 +28,16 @@ export function EnrolCard({ course }: { course: CatalogCourse }) {
 
   return (
     <div className="p-6">
-      {hasModules ? (
+      {fullCourse !== null ? (
+        <>
+          <p className="text-sm font-medium text-subtle">Full course, {course.modules.length} modules</p>
+          <p className="mt-1 font-display text-3xl font-semibold text-ink">{formatPrice(fullCourse)}</p>
+          <p className="mt-1 text-sm text-muted">
+            Or buy modules one at a time from {formatPrice(from!)}. If you already own some modules, you only pay for
+            the rest.
+          </p>
+        </>
+      ) : hasModules ? (
         <>
           <p className="text-sm font-medium text-subtle">Priced per module</p>
           <p className="mt-1 font-display text-2xl font-semibold text-ink">
@@ -41,8 +56,11 @@ export function EnrolCard({ course }: { course: CatalogCourse }) {
       )}
 
       <div className="mt-5 flex flex-col gap-2">
+        {fullCourse !== null && (
+          <BuyModuleButton courseId={course.id} price={fullCourse} canBuy size="lg" label="Buy the full course" />
+        )}
         {open && (
-          <ButtonLink href="#modules" size="lg">
+          <ButtonLink href="#modules" size="lg" variant={fullCourse !== null ? "secondary" : "primary"}>
             Choose a module
           </ButtonLink>
         )}

@@ -12,6 +12,7 @@ import { api, ApiError } from "@/lib/api";
 import { formatDate, formatPrice, fullName } from "@/lib/utils";
 import type { StudentDetail as Student } from "@/types/admin";
 import { Badge, ConfirmDialog, OrderStatusBadge, QueryBoundary, Table, Td, Th } from "../ui";
+import { AddPurchaseDialog } from "./AddPurchaseDialog";
 
 type Action = { kind: "disable" } | { kind: "enable" } | { kind: "make-admin" } | { kind: "make-student" };
 
@@ -46,6 +47,7 @@ export function StudentDetail() {
   const [action, setAction] = useState<Action | null>(null);
   const [busy, setBusy] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
+  const [addingPurchase, setAddingPurchase] = useState(false);
 
   async function apply() {
     if (!action) return;
@@ -122,7 +124,26 @@ export function StudentDetail() {
             </dl>
 
             <section>
-              <h2 className="mb-3 font-display text-lg font-semibold text-ink">Purchased modules</h2>
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+                <h2 className="font-display text-lg font-semibold text-ink">Purchased modules</h2>
+                <Button size="sm" onClick={() => setAddingPurchase(true)}>
+                  Add purchase
+                </Button>
+              </div>
+              <AddPurchaseDialog
+                open={addingPurchase}
+                onClose={() => setAddingPurchase(false)}
+                onDone={reload}
+                studentId={student.id}
+                studentName={fullName(student)}
+                ownedModuleIds={
+                  new Set(
+                    student.purchases
+                      .filter((p) => p.module && new Date(p.expiresAt) > new Date())
+                      .map((p) => p.module!.id),
+                  )
+                }
+              />
               {student.purchases.length === 0 ? (
                 <Card className="py-8 text-center text-sm text-muted">No purchases yet.</Card>
               ) : (

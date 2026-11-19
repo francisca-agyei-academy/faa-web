@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/Button";
 import { PageHeader } from "@/components/ui/Card";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { formatDate, fullName } from "@/lib/utils";
 import type { Paginated, StudentRow } from "@/types/admin";
 import { Badge, Pagination, QueryBoundary, Select, Table, Td, Th } from "../ui";
+import { AddStudentDialog } from "./AddStudentDialog";
 
 export function StudentList() {
   const [search, setSearch] = useState("");
@@ -14,6 +16,7 @@ export function StudentList() {
   const [status, setStatus] = useState("");
   const [role, setRole] = useState("");
   const [page, setPage] = useState(1);
+  const [adding, setAdding] = useState(false);
 
   // Wait for typing to pause before searching.
   useEffect(() => {
@@ -29,7 +32,12 @@ export function StudentList() {
 
   return (
     <>
-      <PageHeader title="Students" description="Everyone with an account. Open a student to see their orders and purchases." />
+      <PageHeader
+        title="Students"
+        description="Everyone with an account. Open a student to see their orders and purchases."
+        action={<Button onClick={() => setAdding(true)}>Add student</Button>}
+      />
+      <AddStudentDialog open={adding} onClose={() => setAdding(false)} onCreated={reload} />
       <div className="mb-4 flex flex-wrap items-end gap-3">
         <input
           type="search"

@@ -6,6 +6,7 @@ import { useApiQuery } from "@/hooks/useApiQuery";
 import { useAuth } from "@/hooks/useAuth";
 import type { MyPurchase } from "@/types/catalog";
 import { formatDate } from "@/lib/utils";
+import { MoreModules } from "./MoreModules";
 
 export function DashboardOverview() {
   const { user } = useAuth();
@@ -45,6 +46,9 @@ export function DashboardOverview() {
             Modules you buy will show up here with how long you have access.
           </EmptyState>
         )}
+      </div>
+      <div className="mt-10">
+        <MoreModules purchases={data?.purchases} />
       </div>
     </>
   );

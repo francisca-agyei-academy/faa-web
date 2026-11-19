@@ -9,16 +9,22 @@ import { api, ApiError } from "@/lib/api";
 import { formatPrice } from "@/lib/utils";
 
 /**
- * Starts a Paystack checkout for one module. Logged-out visitors are sent to log in first and
+ * Starts a Paystack checkout for one module, or for a whole course when `courseId` is given. Logged-out visitors are sent to log in first and
  * brought back here; Paystack then returns the buyer to /checkout/callback.
  */
 export function BuyModuleButton({
   moduleId,
+  courseId,
   price,
   canBuy,
   size = "md",
+  label,
 }: {
-  moduleId: string;
+  moduleId?: string;
+  /** Buy every module of this course in one payment (used instead of moduleId). */
+  courseId?: string;
+  /** Overrides the default "Buy for GH₵…" text. */
+  label?: string;
   price: number | null;
   /** Enrolment is open and the module has a price and access period. */
   canBuy: boolean;
@@ -39,7 +45,7 @@ export function BuyModuleButton({
 
   async function buy() {
     if (!user) {
-      toast.info("Log in or create an account to buy this module.");
+      toast.info(`Log in or create an account to buy this ${courseId ? "course" : "module"}.`);
       router.push(`/login?next=${encodeURIComponent(pathname)}`);
       return;
     }
@@ -53,14 +59,14 @@ export function BuyModuleButton({
     try {
       const { authorizationUrl } = await api<{ authorizationUrl: string }>("/payments/checkout", {
         method: "POST",
-        body: { moduleId },
+        body: courseId ? { courseId } : { moduleId },
       });
       toast.loading("Taking you to Paystack…");
       window.location.assign(authorizationUrl);
     } catch (err) {
       setBusy(false);
       if (err instanceof ApiError && err.code === "CONFLICT") {
-        toast.success("You already have this module", {
+        toast.success(courseId ? "You already have every module in this course" : "You already have this module", {
           description: "Open it from My courses.",
           action: { label: "My courses", onClick: () => router.push("/my-courses") },
         });
@@ -72,7 +78,7 @@ export function BuyModuleButton({
 
   return (
     <Button size={size} onClick={buy} loading={busy} disabled={status === "loading"}>
-      Buy for {formatPrice(price)}
+      {label ?? `Buy for ${formatPrice(price)}`}
     </Button>
   );
 }

@@ -13,6 +13,8 @@ import { api, ApiError } from "@/lib/api";
 interface VerifyResponse {
   status: "SUCCESS" | "PENDING" | "FAILED";
   module: { id: string; title: string; course: { slug: string; title: string } | null } | null;
+  /** Set for a full-course purchase instead of `module`. */
+  course?: { slug: string; title: string } | null;
 }
 
 type State = { kind: "checking" } | { kind: "done"; result: VerifyResponse } | { kind: "error"; message: string };
@@ -39,7 +41,9 @@ export function CheckoutResult() {
           if (result.status !== "PENDING" || attempt === MAX_POLLS) {
             if (cancelled) return;
             setState({ kind: "done", result });
-            if (result.status === "SUCCESS") toast.success("Payment confirmed. Your module is unlocked!");
+            if (result.status === "SUCCESS") {
+              toast.success(result.course ? "Payment confirmed. The whole course is unlocked!" : "Payment confirmed. Your module is unlocked!");
+            }
             if (result.status === "FAILED") toast.error("The payment didn't go through.");
             return;
           }
@@ -71,8 +75,9 @@ export function CheckoutResult() {
     );
   }
 
-  const { status, module } = state.result;
-  const courseHref = module?.course ? `/courses/${module.course.slug}` : "/courses";
+  const { status, module, course } = state.result;
+  const slug = course?.slug ?? module?.course?.slug;
+  const courseHref = slug ? `/courses/${slug}` : "/courses";
 
   if (status === "SUCCESS") {
     return (
@@ -82,7 +87,11 @@ export function CheckoutResult() {
         </span>
         <h1 className="mt-5 font-display text-2xl font-semibold text-ink">You&apos;re in!</h1>
         <p className="mt-2 text-sm text-muted">
-          {module ? (
+          {course ? (
+            <>
+              Every module in <strong className="text-ink">{course.title}</strong> is unlocked.
+            </>
+          ) : module ? (
             <>
               <strong className="text-ink">{module.title}</strong> is unlocked
               {module.course ? <> from {module.course.title}</> : null}.
@@ -92,7 +101,7 @@ export function CheckoutResult() {
           )}
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
-          {module && <ButtonLink href={`/course/${module.id}`}>Start learning</ButtonLink>}
+          {module && !course && <ButtonLink href={`/course/${module.id}`}>Start learning</ButtonLink>}
           <ButtonLink href="/my-courses" variant="secondary">
             My courses
           </ButtonLink>
