@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Suspense } from "react";
+import { Menu } from "@/components/ui/Icons";
 import { Logo } from "@/components/ui/Logo";
 import { websiteNav } from "@/lib/site";
 import { MobileMenu } from "./MobileMenu";
@@ -27,7 +29,16 @@ export function Navbar() {
         <div className="hidden lg:block">
           <NavbarAuth />
         </div>
-        <MobileMenu />
+        {/* MobileMenu reads the current path, which is only known at request time. */}
+        <Suspense
+          fallback={
+            <div className="flex size-10 items-center justify-center text-ink lg:hidden" aria-hidden="true">
+              <Menu className="size-6" />
+            </div>
+          }
+        >
+          <MobileMenu />
+        </Suspense>
       </nav>
     </ScrollHeader>
   );
