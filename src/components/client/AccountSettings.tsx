@@ -77,7 +77,8 @@ function ProfileForm({ user }: { user: User }) {
   );
 }
 
-function PasswordForm() {
+/** Change the password, or (for an account made with Google) set the first one. */
+function PasswordForm({ settingFirst }: { settingFirst: boolean }) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -95,21 +96,26 @@ function PasswordForm() {
     setErrors({});
     setError(null);
     try {
-      const { accessToken } = await api<{ accessToken: string }>("/auth/change-password", {
+      const result = await api<{ accessToken: string; user?: User }>("/auth/change-password", {
         method: "POST",
-        body: { currentPassword: String(form.get("currentPassword") ?? ""), newPassword },
+        body: settingFirst ? { newPassword } : { currentPassword: String(form.get("currentPassword") ?? ""), newPassword },
       });
       // Changing the password revokes older tokens, so keep this session on the new one.
-      const { user } = getAuthState();
-      if (user) setSession(user, accessToken);
+      // The returned user has hasPassword: true, which switches this form to "Change password".
+      const user = result.user ?? getAuthState().user;
+      if (user) setSession(user, result.accessToken);
       formEl.reset();
-      toast.success("Password changed. Your other devices have been signed out.");
+      toast.success(
+        settingFirst
+          ? "Password set. You can now log in with your email and password too."
+          : "Password changed. Your other devices have been signed out.",
+      );
     } catch (err) {
       if (err instanceof ApiError) {
         setErrors({ ...err.fieldErrors, ...(err.code === "WRONG_PASSWORD" && { currentPassword: err.message }) });
         if (err.code !== "WRONG_PASSWORD" && err.code !== "VALIDATION_FAILED") setError(err.message);
       } else {
-        setError("Couldn't change your password.");
+        setError(settingFirst ? "Couldn't set your password." : "Couldn't change your password.");
       }
     } finally {
       setSaving(false);
@@ -118,14 +124,20 @@ function PasswordForm() {
 
   return (
     <form onSubmit={change} className="flex flex-col gap-4">
-      <Input
-        label="Current password"
-        name="currentPassword"
-        type="password"
-        required
-        autoComplete="current-password"
-        error={errors.currentPassword}
-      />
+      {settingFirst ? (
+        <p className="text-sm text-muted">
+          You log in with Google. Add a password if you also want to log in with your email address.
+        </p>
+      ) : (
+        <Input
+          label="Current password"
+          name="currentPassword"
+          type="password"
+          required
+          autoComplete="current-password"
+          error={errors.currentPassword}
+        />
+      )}
       <div className="grid gap-4 sm:grid-cols-2">
         <Input
           label="New password"
@@ -150,7 +162,7 @@ function PasswordForm() {
       {error && <Alert tone="error">{error}</Alert>}
       <div>
         <Button type="submit" loading={saving}>
-          Change password
+          {settingFirst ? "Set password" : "Change password"}
         </Button>
       </div>
     </form>
@@ -187,6 +199,7 @@ function SignOutEverywhere() {
 export function AccountSettings() {
   const { user } = useAuth();
   if (!user) return null;
+  const settingFirst = user.hasPassword === false;
   return (
     <>
       <PageHeader title="Account settings" description={`Member since ${formatDate(user.createdAt)}`} />
@@ -194,8 +207,15 @@ export function AccountSettings() {
         <Section title="Profile" description="Your name as it appears on your account and receipts.">
           <ProfileForm user={user} />
         </Section>
-        <Section title="Password" description="Changing it signs you out on your other devices.">
-          <PasswordForm />
+        <Section
+          title={settingFirst ? "Set a password" : "Password"}
+          description={
+            settingFirst
+              ? "Optional. Google stays connected either way."
+              : "Changing it signs you out on your other devices."
+          }
+        >
+          <PasswordForm settingFirst={settingFirst} />
         </Section>
         <Section title="Devices" description="Sign out everywhere, including this device.">
           <SignOutEverywhere />

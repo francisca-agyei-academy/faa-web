@@ -8,6 +8,8 @@ export interface User {
   phone: string | null;
   role: Role;
   isEmailVerified: boolean;
+  /** False for an account made with Google that hasn't set a password yet */
+  hasPassword: boolean;
   createdAt: string;
 }
 
