@@ -10,13 +10,18 @@ import { useHydrated } from "@/hooks/useHydrated";
 import { useAuth } from "@/hooks/useAuth";
 import { ApiError } from "@/lib/api";
 import { homeFor, safeNextPath } from "@/lib/auth";
+import { GoogleButton, googleErrors, OrDivider } from "./GoogleButton";
 
 export function LoginForm() {
   const hydrated = useHydrated();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login } = useAuth();
-  const [error, setError] = useState<string | null>(null);
+  // A failed Google sign-in comes back as ?error=<code>.
+  const [error, setError] = useState<string | null>(() => {
+    const code = searchParams.get("error");
+    return code ? (googleErrors[code] ?? googleErrors.google_failed!) : null;
+  });
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
 
@@ -43,6 +48,8 @@ export function LoginForm() {
   return (
     <form method="post" onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
       {error && <Alert tone="error">{error}</Alert>}
+      <GoogleButton next={searchParams.get("next")} />
+      <OrDivider>or log in with email</OrDivider>
       <Input label="Email" name="email" type="email" autoComplete="email" required error={fieldErrors.email} />
       <Input
         label="Password"

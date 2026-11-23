@@ -31,8 +31,8 @@ export function NavbarAuth({ inline = false, onNavigate }: { inline?: boolean; o
   if (user) return inline ? <InlineUserMenu user={user} onNavigate={onNavigate} /> : <AccountDropdown user={user} links={menuLinks(user)} />;
 
   return (
-    <div className="flex items-center gap-2" onClick={onNavigate}>
-      <ButtonLink href="/login" variant="ghost">
+    <div className={inline ? "grid grid-cols-2 gap-2" : "flex items-center gap-2"} onClick={onNavigate}>
+      <ButtonLink href="/login" variant={inline ? "secondary" : "ghost"}>
         Log in
       </ButtonLink>
       <ButtonLink href="/register">Get started</ButtonLink>

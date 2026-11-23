@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/Input";
 import { useHydrated } from "@/hooks/useHydrated";
 import { useAuth } from "@/hooks/useAuth";
 import { ApiError } from "@/lib/api";
+import { GoogleButton, OrDivider } from "./GoogleButton";
 
 export function RegisterForm() {
   const hydrated = useHydrated();
@@ -48,6 +49,8 @@ export function RegisterForm() {
   return (
     <form method="post" onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
       {error && <Alert tone="error">{error}</Alert>}
+      <GoogleButton label="Sign up with Google" />
+      <OrDivider>or sign up with email</OrDivider>
       <div className="grid gap-4 sm:grid-cols-2">
         <Input label="First name" name="firstName" autoComplete="given-name" required error={fieldErrors.firstName} />
         <Input label="Last name" name="lastName" autoComplete="family-name" required error={fieldErrors.lastName} />
