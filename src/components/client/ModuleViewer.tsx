@@ -29,6 +29,9 @@ export function ModuleViewer() {
 
   if (error) {
     const locked = error.code === "NOT_PURCHASED" || error.code === "ACCESS_EXPIRED";
+    // The API says where this module can be bought or renewed: its card on the course page.
+    const details = error.details as { renewPath?: unknown } | undefined;
+    const renewPath = typeof details?.renewPath === "string" ? details.renewPath : null;
     return (
       <Card className="mx-auto max-w-lg text-center">
         <h1 className="font-display text-xl font-semibold text-ink">
@@ -37,7 +40,9 @@ export function ModuleViewer() {
         <p className="mt-2 text-sm text-muted">{error.message}</p>
         <div className="mt-6 flex justify-center gap-2">
           {locked ? (
-            <ButtonLink href="/courses">Browse courses</ButtonLink>
+            <ButtonLink href={renewPath ?? "/courses"}>
+              {!renewPath ? "Browse courses" : error.code === "ACCESS_EXPIRED" ? "Renew this module" : "Buy this module"}
+            </ButtonLink>
           ) : (
             <button type="button" onClick={reload} className="text-sm font-medium text-brand hover:underline">
               Try again

@@ -39,6 +39,8 @@ export interface MyPurchase {
   expiresAt: string;
   createdAt: string;
   isActive: boolean;
+  /** The module's card on its course page (/courses/slug#module-N), to buy it again */
+  renewPath: string;
   module: {
     id: string;
     title: string;

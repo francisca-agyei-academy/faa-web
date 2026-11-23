@@ -56,12 +56,23 @@ export function MyCourses() {
                     </p>
                     <div className="mt-auto pt-5">
                       {p.isActive ? (
-                        <ButtonLink href={`/course/${mod.id}`} className="w-full">
-                          Open module
-                        </ButtonLink>
+                        <>
+                          <ButtonLink href={`/course/${mod.id}`} className="w-full">
+                            Open module
+                          </ButtonLink>
+                          {/* Renewing early adds the new period on after the current one, so no days are lost. */}
+                          {left <= 7 && (
+                            <Link
+                              href={p.renewPath}
+                              className="mt-3 block text-center text-sm font-medium text-brand hover:underline"
+                            >
+                              Renew now, no days lost
+                            </Link>
+                          )}
+                        </>
                       ) : (
-                        <ButtonLink href={course ? `/courses/${course.slug}` : "/courses"} variant="secondary" className="w-full">
-                          Buy again
+                        <ButtonLink href={p.renewPath} className="w-full">
+                          Renew access
                         </ButtonLink>
                       )}
                     </div>
