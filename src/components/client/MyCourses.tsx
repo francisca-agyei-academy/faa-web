@@ -54,11 +54,30 @@ export function MyCourses() {
                         ? `Access until ${formatDate(p.expiresAt)} (${left} ${left === 1 ? "day" : "days"} left)`
                         : `Access ended ${formatDate(p.expiresAt)}`}
                     </p>
+                    {p.progress?.total > 0 && (
+                      <div className="mt-4">
+                        <div className="h-1.5 overflow-hidden rounded-full bg-canvas">
+                          <div
+                            className="h-full rounded-full bg-success"
+                            style={{ width: `${Math.round((p.progress.completed / p.progress.total) * 100)}%` }}
+                          />
+                        </div>
+                        <p className="mt-1.5 text-xs text-muted">
+                          {p.progress.completed} of {p.progress.total} lessons completed
+                        </p>
+                      </div>
+                    )}
                     <div className="mt-auto pt-5">
                       {p.isActive ? (
                         <>
                           <ButtonLink href={`/course/${mod.id}`} className="w-full">
-                            Open module
+                            {!p.progress?.total
+                              ? "Open module"
+                              : p.progress.completed === 0
+                                ? "Start learning"
+                                : p.progress.completed >= p.progress.total
+                                  ? "Review module"
+                                  : "Continue learning"}
                           </ButtonLink>
                           {/* Renewing early adds the new period on after the current one, so no days are lost. */}
                           {left <= 7 && (

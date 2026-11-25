@@ -41,6 +41,8 @@ export interface MyPurchase {
   isActive: boolean;
   /** The module's card on its course page (/courses/slug#module-N), to buy it again */
   renewPath: string;
+  /** Lessons on the site and how many of them the student has completed */
+  progress: { total: number; completed: number };
   module: {
     id: string;
     title: string;
