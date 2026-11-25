@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
@@ -85,7 +86,7 @@ export function ModuleManager({
               <div className="min-w-0 flex-1">
                 <p className="font-medium text-ink">{module.title}</p>
                 <p className="mt-0.5 text-xs text-subtle">
-                  {module.topics.length} lessons · {module.price === null ? "No price" : formatPrice(module.price)} ·{" "}
+                  {module.lessons ? `${module.lessons} lessons` : "No lessons yet"} · {module.price === null ? "No price" : formatPrice(module.price)} ·{" "}
                   {module.accessDays === null ? "No access period" : `${module.accessDays} days`}
                 </p>
               </div>
@@ -97,6 +98,12 @@ export function ModuleManager({
                 <Button variant="ghost" size="sm" disabled={index === modules.length - 1} onClick={() => move(module, "down")} aria-label={`Move ${module.title} down`}>
                   ↓
                 </Button>
+                <Link
+                  href={`/admin/modules/${module.id}/lessons`}
+                  className="inline-flex h-8 items-center rounded-lg border border-line bg-surface px-3 text-sm font-medium text-ink hover:bg-canvas"
+                >
+                  Lessons
+                </Link>
                 <Button variant="secondary" size="sm" onClick={() => setEditing(module)}>
                   Edit
                 </Button>
@@ -214,7 +221,7 @@ function ModuleForm({ courseId, module, onDone }: { courseId: string; module: Ad
           onChange={(e) => set("accessDays", e.target.value ? Number(e.target.value) : null)}
         />
       </div>
-      <TopicsEditor label="Lessons" value={values.topics} onChange={(topics) => set("topics", topics)} />
+      <TopicsEditor label="Topics (shown on the course page)" value={values.topics} onChange={(topics) => set("topics", topics)} />
       <Input
         label="Content URL (optional)"
         placeholder="https://"

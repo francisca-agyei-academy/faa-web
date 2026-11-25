@@ -24,6 +24,8 @@ export interface AdminModule {
   previewUrl: string | null;
   thumbnailUrl: string | null;
   isPublished: boolean;
+  /** Number of lessons on the site (from the admin course endpoint) */
+  lessons?: number;
 }
 
 interface CourseBase {
