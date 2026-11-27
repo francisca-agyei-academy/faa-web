@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useEffect, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
 import { PageSpinner } from "@/components/ui/Spinner";
@@ -17,16 +17,19 @@ export function AuthGuard({ role, children }: { role?: Role; children: ReactNode
   const { status, user, refresh } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const wrongRole = user && role && user.role !== role;
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.replace(`/login?next=${encodeURIComponent(pathname)}`);
+      // Keep the query too, e.g. ?lesson=3, so login returns to the same place.
+      const query = searchParams.toString();
+      router.replace(`/login?next=${encodeURIComponent(query ? `${pathname}?${query}` : pathname)}`);
     } else if (wrongRole) {
       router.replace(homeFor(user.role));
     }
-  }, [status, wrongRole, user, pathname, router]);
+  }, [status, wrongRole, user, pathname, searchParams, router]);
 
   if (status === "offline") {
     return (

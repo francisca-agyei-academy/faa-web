@@ -90,8 +90,9 @@ export function ModuleViewer() {
 
   const item = data?.module;
   if (!item) return null;
+  // Keyed by module: going from one module straight to another starts fresh (progress, start lesson, menus).
   return item.lessons?.length ? (
-    <LessonReader item={item} />
+    <LessonReader key={item.id} item={item} onAccessLost={reload} />
   ) : (
     <ReaderShell crumb={item.course?.title} title={item.title}>
       <ModuleOverview item={item} />
@@ -173,7 +174,7 @@ function ReaderShell({
  * lesson, the reading in the middle, and "Mark as completed" / "Go to next item" at the end.
  * The open lesson is in the address (?lesson=3); without one, it opens the first unfinished lesson.
  */
-function LessonReader({ item }: { item: ModuleContent }) {
+function LessonReader({ item, onAccessLost }: { item: ModuleContent; onAccessLost: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -202,11 +203,29 @@ function LessonReader({ item }: { item: ModuleContent }) {
     setMobileMenu(false);
   }
 
+  // A new lesson starts at its top, and the outline shows where you are (lesson 12 sits below the fold).
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+    for (const el of document.querySelectorAll<HTMLElement>('[data-current-lesson="true"]')) {
+      el.scrollIntoView({ block: "nearest" });
+    }
+  }, [number]);
+
+  // The phone drawer: Escape closes it, the page behind doesn't scroll, and focus moves into it.
   useEffect(() => {
     if (!mobileMenu) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMobileMenu(false);
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.getElementById("close-lesson-menu")?.focus();
+    for (const el of document.querySelectorAll<HTMLElement>('[data-current-lesson="true"]')) {
+      el.scrollIntoView({ block: "nearest" });
+    }
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = previousOverflow;
+    };
   }, [mobileMenu]);
 
   async function setLessonDone(id: string, done: boolean) {
@@ -221,6 +240,11 @@ function LessonReader({ item }: { item: ModuleContent }) {
       return true;
     } catch (err) {
       setCompleted(before);
+      // Access ended (or was removed) while reading: show the locked screen with the renew link.
+      if (err instanceof ApiError && (err.code === "ACCESS_EXPIRED" || err.code === "NOT_PURCHASED")) {
+        onAccessLost();
+        return false;
+      }
       toast.error(err instanceof ApiError ? err.message : "Couldn't save your progress. Please try again.");
       return false;
     }
@@ -265,6 +289,8 @@ function LessonReader({ item }: { item: ModuleContent }) {
                 <Link
                   href={hrefFor(n)}
                   aria-current={current ? "page" : undefined}
+                  data-current-lesson={current || undefined}
+                  scroll={false}
                   className={cn(
                     "flex gap-3 border-l-4 py-3 pl-4 pr-5 transition-colors",
                     current ? "border-brand bg-brand-soft" : "border-transparent hover:bg-canvas",
@@ -338,6 +364,7 @@ function LessonReader({ item }: { item: ModuleContent }) {
             )}
           >
             <button
+              id="close-lesson-menu"
               type="button"
               onClick={() => setMobileMenu(false)}
               aria-label="Close course menu"
@@ -371,7 +398,13 @@ function LessonReader({ item }: { item: ModuleContent }) {
               </p>
             )}
 
-            <LessonMarkdown className="mt-8">{lesson.body}</LessonMarkdown>
+            {lesson.body.trim() ? (
+              <LessonMarkdown className="mt-8">{lesson.body}</LessonMarkdown>
+            ) : (
+              <p className="mt-8 rounded-xl border border-dashed border-line bg-surface px-5 py-8 text-center text-sm text-muted">
+                This lesson&apos;s content is on its way. You can move on to the next item for now.
+              </p>
+            )}
 
             {/* The end of the lesson: what Coursera calls the item footer. */}
             <div className="mt-14 rounded-2xl border border-line bg-surface p-5 sm:p-6">

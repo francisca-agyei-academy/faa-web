@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { LessonMarkdown } from "@/components/client/LessonMarkdown";
 import { Button } from "@/components/ui/Button";
@@ -170,6 +170,14 @@ function LessonForm({
   const [saving, setSaving] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const changed = title !== (lesson?.title ?? "") || body !== (lesson?.body ?? "");
+
+  // Closing the tab, reloading or the browser's back button would lose unsaved edits: ask first.
+  useEffect(() => {
+    if (!changed || saving) return;
+    const warn = (e: BeforeUnloadEvent) => e.preventDefault();
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [changed, saving]);
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
